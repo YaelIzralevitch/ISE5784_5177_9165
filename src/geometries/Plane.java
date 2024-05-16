@@ -19,7 +19,7 @@ public class Plane implements Geometry {
      */
     public Plane(Point p1, Point p2, Point p3) {
         q = p1;
-        normal = null;
+        normal = null;  //TODO:
     }
 
     /**
