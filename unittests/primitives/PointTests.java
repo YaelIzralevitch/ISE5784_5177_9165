@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for primitives.Point class
  * @author Shir Perez and Yael Izralevitch
  */
-class PointTest {
+class PointTests {
     /**
      * Test method for {@link Point#{MethodName}(${Parameters})}
      */

@@ -90,6 +90,7 @@ public final class Main
         }
         if (!v1.add(v2).equals(v1Opposite))
             out.println("ERROR: Vector + Vector does not work correctly");
+
         if (!v1.subtract(v2).equals(new Vector(3, 6, 9)))
             out.println("ERROR: Vector + Vector does not work correctly");
 

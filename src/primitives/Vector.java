@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.isZero;
+
 /**
  * This class contains functions and calculations on a Vector
  */
@@ -12,10 +14,7 @@ public class Vector extends Point {
      * @param z third coordinate
      */
     public Vector(double x, double y, double z) {
-        super(x, y, z);
-        if (this.xyz.equals(Double3.ZERO)) {
-            throw new IllegalArgumentException("This is the zero vector");
-        }
+        this(new Double3(x,y,z));
     }
 
     /**
@@ -76,6 +75,9 @@ public class Vector extends Point {
      * @return a new vector
      */
     public Vector scale(double num) {
+        if(isZero(num))
+            throw new IllegalArgumentException("A vector cannot be scale with 0");
+
         return new Vector(this.xyz.scale(num));
     }
 

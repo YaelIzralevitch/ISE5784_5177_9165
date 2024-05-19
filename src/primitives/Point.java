@@ -21,7 +21,7 @@ public class Point {
      * @param z third coordinate
      */
     public Point(double x, double y, double z) {
-        this.xyz = new Double3(x, y, z);
+        this(new Double3(x, y, z));
     }
 
     /**
