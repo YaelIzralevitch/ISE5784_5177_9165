@@ -33,6 +33,12 @@ public class Plane implements Geometry {
         this.normal = vector.normalize();
     }
 
+    /**
+     * Get function - return the q point
+     *
+     */
+    public Point getQ() {return q;}
+
     @Override
     public Vector getNormal(Point p1) {
         return null;

@@ -41,6 +41,12 @@ public class Point {
     }
 
     /**
+     * getXYZ function - return xyz field
+     *
+     */
+    public Double3 getXYZ(){ return xyz; }
+
+    /**
      * Subtract function - receives point and subtract two points
      *
      * @param p1 point

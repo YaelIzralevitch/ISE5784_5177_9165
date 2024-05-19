@@ -10,6 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class VectorTests {
 
     /**
+     * Delta value for accuracy when comparing the numbers of type 'double' in
+     * assertEquals
+     */
+    private final double DELTA = 0.000001;
+
+    /**
      * Test method for {@link Vector#{MethodName}(${Parameters})}
      */
     @Test
@@ -38,7 +44,7 @@ class VectorTests {
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test - squared length of vector
-        assertEquals(9, v4.lengthSquared(), 0.00001, "ERROR: lengthSquared() wrong value");
+        assertEquals(9, v4.lengthSquared(), DELTA, "ERROR: lengthSquared() wrong value");
     }
 
     /**
@@ -50,7 +56,7 @@ class VectorTests {
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test - length of vector
-        assertEquals(3, v4.length(), 0.00001, "ERROR: length() wrong value");
+        assertEquals(3, v4.length(), DELTA, "ERROR: length() wrong value");
     }
 
     /**
@@ -58,6 +64,18 @@ class VectorTests {
      */
     @Test
     void testScale() {
+        Vector v1         = new Vector(1, 2, 3);
+        Vector v2         = new Vector(-2, -4, -6);
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Test - scale vector with number
+        assertEquals(v2, v1.scale(-2), "the calculations is wrong");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: Test - scale vector with zero
+        assertThrows(IllegalArgumentException.class,
+                     ()-> v1.scale(0),
+                     "scale() with zero number does not throw an exception");
     }
 
     /**
@@ -73,14 +91,14 @@ class VectorTests {
         // TC01: Test - dotProduct between two vectors
         assertEquals(-28 ,
                 v1.dotProduct(v2),
-                0.00001,
+                DELTA,
                 "ERROR: dotProduct() wrong value");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test - dotProduct between two vectors with result zero
         assertEquals(0 ,
                 v1.dotProduct(v3),
-                0.00001,
+                DELTA,
                 "ERROR: dotProduct() for orthogonal vectors is not zero");
     }
 
@@ -100,7 +118,7 @@ class VectorTests {
 
         // TC01: Test that length of cross-product is proper (orthogonal vectors taken
         // for simplicity)
-        assertEquals(v1.length() * v3.length(), vr.length(), 0.00001, "crossProduct() wrong result length");
+        assertEquals(v1.length() * v3.length(), vr.length(), DELTA, "crossProduct() wrong result length");
 
         // TC02: Test cross-product result orthogonality to its operands
         assertEquals(0, vr.dotProduct(v1), "crossProduct() result is not orthogonal to 1st operand");
@@ -122,7 +140,7 @@ class VectorTests {
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test that the length of the normal is 1
-        assertEquals(1, u.length(), 0.00001, "ERROR: the normalized vector is not a unit vector");
+        assertEquals(1, u.length(), DELTA, "ERROR: the normalized vector is not a unit vector");
 
 
         // =============== Boundary Values Tests ==================

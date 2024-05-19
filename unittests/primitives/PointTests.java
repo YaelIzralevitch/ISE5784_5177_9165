@@ -6,6 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Shir Perez and Yael Izralevitch
  */
 class PointTests {
+
+    /**
+     * Delta value for accuracy when comparing the numbers of type 'double' in
+     * assertEquals
+     */
+    private final double DELTA = 0.000001;
+
     /**
      * Test method for {@link Point#{MethodName}(${Parameters})}
      */
@@ -63,19 +70,19 @@ class PointTests {
         // TC01: Test - squared distance between two points
         assertEquals(9,
                 p1.distanceSquared(p3),
-                0.00001,
+                DELTA,
                 "ERROR: squared distance between points is wrong");
 
         assertEquals(9,
                 p3.distanceSquared(p1),
-                0.00001,
+                DELTA,
                 "ERROR: squared distance between points is wrong");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test - squared distance point to itself given zero
         assertEquals(0,
                 p1.distanceSquared(p1),
-                0.00001,
+                DELTA,
                 "ERROR: point squared distance to itself is not zero");
     }
 
@@ -91,19 +98,19 @@ class PointTests {
         // TC01: Test - distance between two points
         assertEquals(3,
                 p1.distance(p3),
-                0.00001,
+                DELTA,
                 "ERROR: distance between points is wrong");
 
         assertEquals(3,
                 p3.distance(p1),
-                0.00001,
+                DELTA,
                 "ERROR: distance between points is wrong");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test - distance point to itself given zero
         assertEquals(0,
                 p1.distance(p1),
-                0.00001,
+                DELTA,
                 "ERROR: point distance to itself is not zero");
     }
 
