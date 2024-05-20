@@ -31,7 +31,7 @@ class TubeTests {
         Vector result = tb.getNormal(p1);
         // ensure |result| = 1
         assertEquals(1, result.length(), DELTA, "Tube's normal is not an unit vector");
-        // ensure the result is orthogonal to the point in the plane
+        // ensure the result is orthogonal to the point in the Tube
         assertEquals(0d, result.dotProduct(new Vector(p1.getXYZ())), DELTA,
                 "Tube's normal is not orthogonal to the point");
 

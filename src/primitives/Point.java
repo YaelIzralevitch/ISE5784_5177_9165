@@ -41,7 +41,7 @@ public class Point {
     }
 
     /**
-     * getXYZ function - return xyz field
+     * @return xyz field
      *
      */
     public Double3 getXYZ(){ return xyz; }

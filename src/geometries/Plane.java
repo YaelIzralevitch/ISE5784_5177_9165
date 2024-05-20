@@ -3,6 +3,8 @@ package geometries;
 import primitives.Point;
 import primitives.Vector;
 
+import static primitives.Util.isZero;
+
 /**
  * This class contains functions and calculations on a Plane
  */
@@ -18,8 +20,19 @@ public class Plane implements Geometry {
      * @param p3 third point
      */
     public Plane(Point p1, Point p2, Point p3) {
+        if(p1.equals(p2) || p1.equals(p3) || p2.equals(p3))
+            throw new IllegalArgumentException("It is not possible to build a plane with less than 3 different points");
+
+        Vector v1 = new Vector(p2.subtract(p1).getXYZ());
+        Vector v2 = new Vector(p3.subtract(p1).getXYZ());
+        Vector v = v1.crossProduct(v2);
+        if(v.getXYZ().getD1() == 0 && v.getXYZ().getD2() == 0 && v.getXYZ().getD3() == 0)
+            throw new IllegalArgumentException("The three points lie on the same lines");
+
         q = p1;
-        normal = null;  //TODO:
+        v1 = new Vector((p2.subtract(p1)).getXYZ());
+        v2 = new Vector((p3.subtract(p1)).getXYZ());
+        normal = (v1.crossProduct(v2)).normalize();
     }
 
     /**
@@ -41,7 +54,7 @@ public class Plane implements Geometry {
 
     @Override
     public Vector getNormal(Point p1) {
-        return null;
+        return normal;
     }
 
     /**

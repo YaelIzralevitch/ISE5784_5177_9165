@@ -16,8 +16,16 @@ public class Ray {
     }
 
     /**
-     * Equals function
+     * @return  head
      */
+    public Point getHead() { return head; }
+
+    /**
+     * @return direction
+     */
+    public Vector getDirection() { return direction; }
+
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
