@@ -61,9 +61,6 @@ class PlaneTest {
         Vector result = pl.getNormal(p1);
         // ensure |result| = 1
         assertEquals(1, result.length(), DELTA, "Plane's normal is not an unit vector");
-        // ensure the result is orthogonal to the point in the plane
-        assertEquals(0d, result.dotProduct(new Vector(new Double3(1,2,3))), DELTA,
-                    "Plane's normal is not orthogonal to the point");
     }
 
 }

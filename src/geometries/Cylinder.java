@@ -4,6 +4,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import static primitives.Util.isZero;
+
 /**
  * This class contains functions and calculations on a Cylinder
  */
@@ -24,7 +26,28 @@ public class Cylinder extends Tube {
 
     @Override
     public Vector getNormal(Point p1) {
-        return null;
+
+        if (p1.equals(axis.getHead())) { //The point is in the middle of the base
+            return axis.getDirection().scale(-1);
+        }
+
+        //Checking where on the cylinder is the point p1
+        Vector fromHeadToP1 = p1.subtract(axis.getHead());
+        double t = axis.getDirection().dotProduct(fromHeadToP1);
+
+        //on the lower base
+        if (isZero(t)) {
+            return axis.getDirection().scale(-1);
+        }
+        //on the top base
+        else if (isZero(t - height)) {
+            return axis.getDirection();
+        }
+        //on the shell
+        else {
+            Point o = axis.getHead().add(axis.getDirection().scale(t));
+            return o.subtract(p1).normalize();
+        }
     }
 
 }

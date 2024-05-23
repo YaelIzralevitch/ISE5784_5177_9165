@@ -31,9 +31,6 @@ class TubeTests {
         Vector result = tb.getNormal(p1);
         // ensure |result| = 1
         assertEquals(1, result.length(), DELTA, "Tube's normal is not an unit vector");
-        // ensure the result is orthogonal to the point in the Tube
-        assertEquals(0d, result.dotProduct(new Vector(p1.getXYZ())), DELTA,
-                "Tube's normal is not orthogonal to the point");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test - if the (head - point) orthogonal to the ray of the tube

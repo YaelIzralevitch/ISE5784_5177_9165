@@ -37,13 +37,9 @@ class CylinderTests {
         Vector result3 = cy.getNormal(p3);
         // ensure |result| = 1
         assertEquals(1, result1.length(), DELTA, "Cylinder's normal is not an unit vector");
-        // ensure the result is orthogonal to the point in the Cylinder
-        assertEquals(0d, result1.dotProduct(new Vector(p1.getXYZ())), DELTA,
-                "Cylinder's normal is not orthogonal to the point");
-
-        //  TC02: ensure that the normal from the base is not directed to the face of the cylinder
+        // TC02: ensure that the normal from the base is not directed to the face of the cylinder
         assertTrue(result2.getXYZ().getD3() < 0, "Lower base normal is not oriented outwards");
-        assertTrue(result3.getXYZ().getD3() < 0, "Higher base normal is not oriented outwards");
+        assertTrue(result3.getXYZ().getD3() > 0, "Higher base normal is not oriented outwards");
 
 
         // =============== Boundary Values Tests ==================

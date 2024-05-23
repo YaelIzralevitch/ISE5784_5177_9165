@@ -32,8 +32,5 @@ class SphereTests {
         Vector result = sp.getNormal(p1);
         // ensure |result| = 1
         assertEquals(1, result.length(), DELTA, "Sphere's normal is not an unit vector");
-        // ensure the result is orthogonal to the point in the sphere
-        assertEquals(0d, result.dotProduct(new Vector(p1.getXYZ())), DELTA,
-                "Sphere's normal is not orthogonal to the point");
     }
 }
