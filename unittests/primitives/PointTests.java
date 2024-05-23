@@ -31,7 +31,6 @@ class PointTests {
         assertThrows(IllegalArgumentException.class,
                 ()-> p1.subtract(p1),
                 "ERROR: (point - itself) does not throw an exception");
-        //TODO: לשאול אם צריך לזרוק חריגה בפונקציית החיסור במקרה של חיסור וקטורים זהים
     }
 
     /**

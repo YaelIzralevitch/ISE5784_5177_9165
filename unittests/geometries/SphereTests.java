@@ -6,7 +6,10 @@ import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+/**
+ * Unit tests for primitives.Sphere class
+ * @author Shir Perez and Yael Izralevitch
+ */
 class SphereTests {
 
     /**

@@ -6,7 +6,10 @@ import primitives.Point;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Unit tests for primitives.Plane class
+ * @author Shir Perez and Yael Izralevitch
+ */
 class PlaneTest {
 
     /**

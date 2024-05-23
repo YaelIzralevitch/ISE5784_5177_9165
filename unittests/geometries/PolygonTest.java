@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import geometries.Polygon;
 import primitives.Point;
 import primitives.Vector;
-
 /**
- * Testing Polygons
+ * Unit tests for primitives.Polygon class
+ * @author Shir Perez and Yael Izralevitch
  */
 public class PolygonTest {
     /**
