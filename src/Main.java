@@ -1,3 +1,7 @@
+/**
+ * Shir Perez 323975177, shir.p999@gmail.com
+ * Yael Izralevitch 213479165, yaeliz150@gmail.com
+ */
 import static java.lang.System.out;
 
 import static primitives.Util.isZero;

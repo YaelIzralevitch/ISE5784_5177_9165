@@ -1,7 +1,10 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 import static primitives.Util.isZero;
 
@@ -25,14 +28,13 @@ public class Plane implements Geometry {
 
         Vector v1 = new Vector(p2.subtract(p1).getXYZ());
         Vector v2 = new Vector(p3.subtract(p1).getXYZ());
-        Vector v = v1.crossProduct(v2);
-        if(v.getXYZ().getD1() == 0 && v.getXYZ().getD2() == 0 && v.getXYZ().getD3() == 0)
+        Vector n = v1.crossProduct(v2);
+
+        if(n.getXYZ().getD1() == 0 && n.getXYZ().getD2() == 0 && n.getXYZ().getD3() == 0)
             throw new IllegalArgumentException("The three points lie on the same lines");
 
         q = p1;
-        v1 = new Vector((p2.subtract(p1)).getXYZ());
-        v2 = new Vector((p3.subtract(p1)).getXYZ());
-        normal = (v1.crossProduct(v2)).normalize();
+        normal = n.normalize();
     }
 
     /**
@@ -64,5 +66,10 @@ public class Plane implements Geometry {
      */
     public Vector getNormal() {
         return normal;
+    }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        return null;
     }
 }

@@ -45,14 +45,12 @@ class PointTests {
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test - add between two points
-        assertEquals(p2,
-                p1.add(v1),
+        assertEquals(p2, p1.add(v1),
                 "ERROR: (point + vector) = other point does not work correctly");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test - add point to opposite vector given zero
-        assertEquals(Point.ZERO,
-                p1.add(v1Opposite),
+        assertEquals(Point.ZERO, p1.add(v1Opposite),
                 "ERROR: (point + vector) = center of coordinates does not work correctly");
 
     }

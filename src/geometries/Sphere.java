@@ -2,7 +2,11 @@ package geometries;
 
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class contains functions and calculations on a Sphere
@@ -25,4 +29,11 @@ public class Sphere extends RadialGeometry {
     public Vector getNormal(Point p1) {
         return (p1.subtract(center)).normalize();
     }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        return null;
+    }
+
+
 }

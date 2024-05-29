@@ -1,6 +1,9 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
+
+import java.util.List;
 
 /**
  * This class is a type of Polygon with 3 points
@@ -10,4 +13,8 @@ public class Triangle extends Polygon {
         super(p1, p2, p3);
     }
 
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        return null;
+    }
 }
