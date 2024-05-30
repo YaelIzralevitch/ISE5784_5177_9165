@@ -74,7 +74,7 @@ class PlaneTest {
      * Test method for {@link geometries.Plane#findIntersections(primitives.Ray)}.
      */
     @Test
-    public void testFindIntersections() {
+    public void testfindIntersections() {
         Plane pl = new Plane(new Point(1, 2, 3),
                              new Point(2, 4, 6),
                              new Point(3, 5, 9));
@@ -82,15 +82,15 @@ class PlaneTest {
         // ============ Equivalence Partitions Tests ==============
         // TC01: The ray crosses the plane (1 point)
         final Point p01 = new Point(1, 1 , 1);
-        final Vector v01 = new Vector(1, 1, 1);
-        List<Point> exp = List.of(new Point(3, 3 , 3));
-        final List<Point> result = pl.findIntersections(new Ray(p01, v01));
-        assertEquals(1, result.size(), "Wrong number of points");
-        assertEquals(exp, result, "Ray crosses plane");
+        final Vector v01 = new Vector(-5, 1, 0);
+        List<Point> exp = List.of(new Point((double) 1/3, (double)17/15 , 1));
+        List<Point> result = pl.findIntersections(new Ray(p01, v01));
+        assertEquals(1, result.size(), "TC01: Wrong number of points");
+        assertEquals(exp, result, "TC01: Ray crosses plane");
 
         // TC02: The ray doesn't crosse the plane (0 point)
         result = pl.findIntersections(new Ray(p01, v01.scale(-1)));
-        assertEquals(null, result, "Ray crosses plane");
+        assertEquals(null, result, "TC02: Ray crosses plane");
 
         // =============== Boundary Values Tests ==================
         // TC11: The ray is parallel to the plane (0 point)
@@ -98,39 +98,39 @@ class PlaneTest {
         final Vector v02 = new Vector(1,2,3);
 
         result = pl.findIntersections(new Ray(pNotOnPlane, v02));
-        assertEquals(null, result, "Ray crosses plane");
+        assertEquals(null, result, "TC11: Ray crosses plane");
 
         // TC12: The ray merges with the plane (0 point)
         final Point pOnPlane1 = new Point(1,0,3);
 
         result = pl.findIntersections(new Ray(pOnPlane1, v02));
-        assertEquals(null, result, "Ray crosses plane");
+        assertEquals(null, result, "TC12: Ray crosses plane");
 
         // TC13: The ray is orthogonal to the plane and starts in front the plane (0 point)
-        final Point pAbovePlane = new Point(1,1,10);
+        final Point pAbovePlane = new Point(1,1,1);
         final Vector v03 = new Vector(3,0,-1);
 
         result = pl.findIntersections(new Ray(pAbovePlane, v03));
-        assertEquals(null, result, "Ray crosses plane");
+        assertEquals(null, result, "TC13: Ray crosses plane");
 
         // TC14: The ray is orthogonal to the plane and starts in the plane (0 point)
         final Point pOnPlane2 = new Point(2,0,0);
 
         result = pl.findIntersections(new Ray(pOnPlane2, v03));
-        assertEquals(null, result, "Ray crosses plane");
+        assertEquals(null, result, "TC14: Ray crosses plane");
 
         // TC15: The ray is orthogonal to the plane and starts after the plane (1 point)
         exp = List.of(new Point(0.3, 0, 0.9));
         result = pl.findIntersections(new Ray(pNotOnPlane, v03));
-        assertEquals(1, result.size(), "Wrong number of points");
-        assertEquals(exp, result, "Ray crosses plane");
+        assertEquals(1, result.size(), "TC15: Wrong number of points");
+        assertEquals(exp, result, "TC15: Ray crosses plane");
 
         // TC16: The ray start in the plane and doesn't orthogonal to the plane (0 point)
         result = pl.findIntersections(new Ray(pOnPlane1, v02));
-        assertEquals(null, result, "Ray crosses plane");
+        assertEquals(null, result, "TC16: Ray crosses plane");
 
         // TC17: The ray start at the plane point q (0 point)
         result = pl.findIntersections(new Ray(pl.getQ(), v02));
-        assertEquals(null, result, "Ray crosses plane");
+        assertEquals(null, result, "TC17: Ray crosses plane");
     }
 }
