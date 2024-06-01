@@ -1,7 +1,9 @@
 package geometries;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import primitives.Point;
@@ -85,6 +87,43 @@ public class Polygon implements Geometry {
 
    @Override
    public List<Point> findIntersections(Ray ray) {
-      return null;
+      //Finding an intersection with the plane of the Polygon
+      List<Point> intersectionWithPlane =  this.plane.findIntersections(ray);
+
+      if(intersectionWithPlane == null)
+         return null;
+
+      List<Vector> vectors = new LinkedList<>();
+      for (Point p : vertices) {
+         vectors.add(p.subtract(ray.getHead()));
+      }
+
+      List<Vector> normals = new LinkedList<>();
+      Vector v1, v2;
+      for (int i = 0; i < vectors.size(); i++) {
+         v1 = vectors.get(i);
+         v2 = i != vectors.size() - 1 ? vectors.get(i + 1) : vectors.getFirst();
+
+         normals.add(v1.crossProduct(v2).normalize());
+      }
+
+      List<Double> scalars = new LinkedList<>();
+      for (Vector n : normals) {
+         scalars.add(alignZero(ray.getDirection().dotProduct(n)));
+      }
+
+      //If one of the scalar products is zero - no cutting
+      if(scalars.contains(0))
+         return null;
+
+      //If all the scalar lines have the same sign - then the intersection with the plane cuts the triangle
+      int sign = (scalars.getFirst() > 0) ? 1 : -1;
+      for (Double s : scalars) {
+         int currentSign = (s > 0) ? 1 : -1;
+         if (currentSign != sign) {
+            return null;
+         }
+      }
+      return intersectionWithPlane;
    }
 }

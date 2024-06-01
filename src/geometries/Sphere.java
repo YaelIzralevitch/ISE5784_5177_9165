@@ -52,18 +52,18 @@ public class Sphere extends RadialGeometry {
         //There is at least one intersection point
         //If there are 2 intersection points
         if(alignZero(t1) > 0 && alignZero(t2) > 0){
-            Point p1 = ray.getHead().add(ray.getDirection().scale(t1));
-            Point p2 = ray.getHead().add(ray.getDirection().scale(t2));
+            Point p1 = ray.getPoint(t1);
+            Point p2 = ray.getPoint(t2);
             return List.of(p1, p2).stream()
                     .sorted(Comparator.comparingDouble(p -> p.distance(ray.getHead()))).toList();
         }
         //If there is one intersection point
         if(alignZero(t1) > 0){
-            Point p1 = ray.getHead().add(ray.getDirection().scale(t1));
+            Point p1 = ray.getPoint(t1);
             return List.of(p1);
         }
         if(alignZero(t2) > 0) {
-            Point p2 = ray.getHead().add(ray.getDirection().scale(t2));
+            Point p2 = ray.getPoint(t2);
             return List.of(p2);
         }
 

@@ -85,7 +85,7 @@ public class Plane implements Geometry {
         double t = t1 / t2;
 
         if(alignZero(t) > 0) {
-            return List.of(ray.getHead().add(ray.getDirection().scale(t)));
+            return List.of(ray.getPoint(t));
         }
         return null ;
     }
