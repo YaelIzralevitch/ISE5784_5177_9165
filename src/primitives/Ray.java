@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.isZero;
+
 /**
  * This class contains functions and calculations on a Ray
  */
@@ -42,4 +44,17 @@ public class Ray {
     public String toString() {
         return this.head + " " + this.direction;
     }
+
+    /**
+     * The method calculates a point on the line of the beam, at a distance given by the head of the fund
+     * @param t number
+     * @return
+     */
+    public Point getPoint(double t){
+        if(isZero(t)){
+            return this.head;
+        }
+        return this.head.add(this.direction.scale(t));
+    }
+
 }

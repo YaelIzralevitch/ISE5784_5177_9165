@@ -4,6 +4,7 @@ import primitives.Point;
 import primitives.Ray;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,6 +39,28 @@ public class Geometries implements Intersectable{
      */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        List<Point> intersectionsPoints = null;
+        List<Point> geometryPoints; //intersections points in one geometry
+
+        //The loop goes through the bodies and checks if each one has intersection points,
+        //if so it will add them to geometryPoints collection
+
+        for(Intersectable geometry: this.geometries) {
+            geometryPoints = geometry.findIntersections(ray);
+            if(geometryPoints != null){
+                //if there are no Point in the intersectionsPoints collection yet
+                if(intersectionsPoints == null){
+                    intersectionsPoints = new LinkedList<>();
+                }
+                intersectionsPoints.addAll(geometryPoints);
+            }
+        }
+
+        if(intersectionsPoints == null){
+            return null;
+        }
+
+        return intersectionsPoints.stream()
+                .sorted(Comparator.comparingDouble(p -> p.distance(ray.getHead()))).toList();
     }
 }
