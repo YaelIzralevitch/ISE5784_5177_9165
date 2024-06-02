@@ -3,11 +3,11 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+/**
+ * Composite class for all the geometries
+ */
 public class Geometries implements Intersectable{
     final private List<Intersectable> geometries = new LinkedList<>();
 
@@ -28,7 +28,7 @@ public class Geometries implements Intersectable{
      * @param geometries
      */
     public void add(Intersectable... geometries) {
-        this.geometries.addAll(Arrays.asList(geometries));
+        Collections.addAll(this.geometries,geometries);
     }
 
     /**
@@ -60,7 +60,9 @@ public class Geometries implements Intersectable{
             return null;
         }
 
-        return intersectionsPoints.stream()
-                .sorted(Comparator.comparingDouble(p -> p.distance(ray.getHead()))).toList();
+        return intersectionsPoints
+                .stream()
+                .sorted(Comparator.comparingDouble(p -> p.distance(ray.getHead())))
+                .toList();
     }
 }

@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import geometries.Polygon;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
 /**
  * Unit tests for primitives.Polygon class
  * @author Shir Perez and Yael Izralevitch
@@ -90,6 +94,56 @@ public class PolygonTest {
         for (int i = 0; i < 3; ++i)
             assertEquals(0d, result.dotProduct(pts[i].subtract(pts[i == 0 ? 3 : i - 1])), DELTA,
                     "Polygon's normal is not orthogonal to one of the edges");
+    }
+
+    /**
+     * Test method for {geometries.Polygon#${findIntersections}}
+     */
+    @Test
+    void testFindIntersections() {
+        Polygon pol = new Polygon(new Point(0, 0, 0),
+                                        new Point(1, 0, 0),
+                                        new Point(1, 1, 0),
+                                        new Point(0,1,0));
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: The ray cross the Polygon (1 point)
+        final Point p01 = new Point(0.5, 0.5 , -1);
+        final Vector v01 = new Vector( 0, 0, 1);
+        List<Point> exp = List.of(new Point(0.5, 0.5 , 0));
+        List<Point> result = pol.findIntersections(new Ray(p01, v01));
+        assertEquals(1, result.size(), "TC01: Wrong number of points");
+        assertEquals(exp, result, "TC01: Ray crosses Polygon");
+
+        // TC02: The ray is outside the Polygon in front of edge (0 points)
+        final Vector v02 = new Vector( 0, 0, -1);
+        result = pol.findIntersections(new Ray(p01, v02));
+        assertNull(result, "TC02: Ray crosses Polygon");
+
+        // TC03: The ray is outside the Polygon in front of a vertex (0 points)
+        final Point p03 = new Point(0.5, -1 , 0);
+        final Vector v03 = new Vector(1, 0, 0);
+
+        result = pol.findIntersections(new Ray(p03, v03));
+        assertNull(result, "TC03: Ray crosses Polygon");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: The ray starts on edge (0 point)
+        final Vector v11 = new Vector(0, 1, 0);
+
+        result = pol.findIntersections(new Ray(p01, v11));
+        assertNull(result, "TC11: Ray crosses Polygon");
+
+        // TC12: The ray starts on continue edge (0 point)
+        result = pol.findIntersections(new Ray(p01, v11));
+        assertNull(result, "TC12: Ray crosses Polygon");
+
+        // TC13: The ray starts on vertex (0 point)
+        final Vector v13 = new Vector(1, 1 , 0);
+
+        result = pol.findIntersections(new Ray(p01, v13));
+        assertNull(result, "TC13: Ray crosses Polygon");
+
     }
 
 }
