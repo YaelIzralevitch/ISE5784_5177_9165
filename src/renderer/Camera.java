@@ -39,13 +39,52 @@ public class Camera implements Cloneable {
      */
     private Camera(){ }
 
-
+    /**
+     * getBuilder function
+     * @return Builder object
+     */
     public static Builder getBuilder(){
-        return null;
+        return new Builder();
     }
 
+    /**
+     * constructRay function
+     * @param nX Represents the amount of columns (row width).
+     * @param nY Represents the amount of rows (column height)
+     * @param j A column of pixels
+     * @param i A row of pixels
+     * @return A ray from camera to center pixel i,j
+     */
     public Ray constructRay(int nX, int nY, int j, int i){
-        return null;
+
+        Point Pc = p0.add(vTo.scale(distance)); //Image center
+
+        //Ratio (pixel width & height)
+        double Rx = width / nX;
+        double Ry = height / nY;
+
+        Point Pij; //Pixel[i,j] center
+        double Yi = -(i - (nY - 1) / 2d) * Ry;
+        double Xj = (j - (nX - 1) / 2d) * Rx;
+
+        // Pixel[i,j] is the center of the view plane
+        if (isZero(Xj) && isZero(Yi)) {
+            Pij = Pc;
+            return new Ray(p0, Pij.subtract(p0));
+        }
+        // Pixel[i,j] is in the middle column
+        if (isZero(Xj)) {
+            Pij = Pc.add(vUp.scale(Yi));
+            return new Ray(p0, Pij.subtract(p0));
+        }
+        //Pixel[i,j] is in the middle row
+        if (isZero(Yi)) {
+            Pij = Pc.add(vRight.scale(Xj));
+            return new Ray(p0, Pij.subtract(p0));
+        }
+
+        Pij = Pc.add(vRight.scale(Xj).add(vUp.scale(Yi)));
+            return new Ray(p0, Pij.subtract(p0));
     }
 
     /**
@@ -72,7 +111,7 @@ public class Camera implements Cloneable {
          * @return this
          */
         public Builder setDirection(Vector vt, Vector vu) {
-            if(isZero(vt.dotProduct(vu))){
+            if(!isZero(vt.dotProduct(vu))){
                 throw new IllegalArgumentException("The vectors are not orthogonal");
             }
 
@@ -114,11 +153,12 @@ public class Camera implements Cloneable {
             return this;
         }
 
+
         /**
          * build function
          * @return an object of Camera
          */
-        public Camera build() throws CloneNotSupportedException {
+        public Camera build() {
             final String className = "Camera";
             final String s = "Missing rendering data";
 
@@ -145,7 +185,12 @@ public class Camera implements Cloneable {
             //calculate vRight
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
 
-            return (Camera) camera.clone();
+            try {
+                return (Camera) camera.clone();
+            }
+            catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
