@@ -1,6 +1,7 @@
 package primitives;
 
 import static primitives.Util.isZero;
+import java.util.List;
 
 /**
  * This class contains functions and calculations on a Ray
@@ -54,6 +55,14 @@ public class Ray {
             return this.head;
         }
         return this.head.add(this.direction.scale(t));
+    }
+
+    /**
+     * findClosestPoint function
+     * @return the point closest to the beginning of the ray
+     */
+    public Point findClosestPoint(List<Point> points){
+        return null;
     }
 
 }

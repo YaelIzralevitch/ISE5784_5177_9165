@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import primitives.*;
 import renderer.*;
-//import scene.Scene; //TODO: להסיר את ההערה
+import scene.Scene;
 
 /**
- * Testing Camera Class
+ * Unit tests for renderer.Camera class
  * @author Shir Perez and Yael Izralevitch
  */
 class CameraTests {
