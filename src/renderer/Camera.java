@@ -1,8 +1,10 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import renderer.RayTracerBase;
 
 import java.util.MissingResourceException;
 
@@ -16,9 +18,14 @@ public class Camera implements Cloneable {
     private Vector vRight;
     private Vector vUp;
     private Vector vTo;
+
     private double width = 0.0;
     private double height = 0.0;
     private double distance = 0.0;
+
+    private ImageWriter imageWriter;
+    private RayTracerBase rayTracer;
+
 
     public Point getP0() { return p0; }
 
@@ -88,6 +95,57 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * printGrid function
+     * @param interval
+     * @param color
+     */
+    public Camera printGrid(int interval, Color color){
+        Color pink = new Color(255d, 29d, 190d);
+
+        for(int i = 0; i < imageWriter.getNx(); i++){
+            for(int j = 0; j < imageWriter.getNy(); j++){
+                if(i % interval == 0 || j % interval == 0){
+                    imageWriter.writePixel(i, j, pink);
+                }
+            }
+        }
+        return this;
+    }
+
+    /**
+     * writeToImage function - Delegates the writeToImage function of imageWriter
+     */
+    public Camera writeToImage(){
+        imageWriter.writeToImage();
+        return this;
+    }
+
+    /**
+     * renderImage function
+     */
+    public Camera renderImage(){
+        for(int i = 0; i < imageWriter.getNx(); i++){
+            for(int j = 0; j < imageWriter.getNy(); j++){
+                castRay(imageWriter.getNx(), imageWriter.getNy(), i, j);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * castRay function
+     * @param nX
+     * @param nY
+     * @param i
+     * @param j
+     */
+    private void castRay(int nX, int nY, int i, int j){
+        Ray ray = constructRay(nX, nY, i, j);
+        Color color = rayTracer.traceRay(ray);
+        imageWriter.writePixel(i, j, color);
+    }
+
+    /**
      * Builder class - Implementation of a builder template for a camera class
      */
     public static class Builder {
@@ -153,6 +211,25 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * setImageWriter function
+         * @param imageWriter
+         * @return this
+         */
+        public Builder setImageWriter(ImageWriter imageWriter) {
+            camera.imageWriter = imageWriter;
+            return this;
+        }
+
+        /**
+         * setRayTracer function
+         * @param rayTracer
+         * @return this
+         */
+        public Builder setRayTracer(RayTracerBase rayTracer) {
+            camera.rayTracer = rayTracer;
+            return this;
+        }
 
         /**
          * build function
@@ -161,6 +238,18 @@ public class Camera implements Cloneable {
         public Camera build() {
             final String className = "Camera";
             final String s = "Missing rendering data";
+
+            if (camera.p0 == null) {
+                throw new MissingResourceException(s, className, "p0");
+            }
+
+            if (camera.vUp == null) {
+                throw new MissingResourceException(s, className, "vUp");
+            }
+
+            if (camera.vTo == null) {
+                throw new MissingResourceException(s, className, "vTo");
+            }
 
             if (camera.width == 0) {
                 throw new MissingResourceException(s, className, "width");
@@ -180,6 +269,14 @@ public class Camera implements Cloneable {
             }
             if (camera.distance <= 0) {
                 throw new IllegalArgumentException("distance can't be negative");
+            }
+
+            if (camera.imageWriter == null) {
+                throw new MissingResourceException(s, className, "imageWriter");
+            }
+
+            if (camera.rayTracer == null) {
+                throw new MissingResourceException(s, className, "rayTracer");
             }
 
             //calculate vRight

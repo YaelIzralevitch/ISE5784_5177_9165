@@ -62,7 +62,15 @@ public class Ray {
      * @return the point closest to the beginning of the ray
      */
     public Point findClosestPoint(List<Point> points){
-        return null;
-    }
+        if (points.isEmpty())
+            return null;
 
+        Point pClosest = points.getFirst();
+        for( Point p : points){
+            if (this.head.distance(p) < this.head.distance(pClosest)){
+                pClosest = p;
+            }
+        }
+        return pClosest;
+    }
 }

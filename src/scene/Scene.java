@@ -3,7 +3,7 @@ import geometries.Geometries;
 import lighting.AmbientLight;
 import primitives.Color;
 
-public class Scene {
+public class    Scene {
 
     public String name;
     public Color background;

@@ -15,8 +15,8 @@ import scene.Scene;
 class CameraTests {
     /** Camera builder for the tests */
     private final Camera.Builder cameraBuilder = Camera.getBuilder()
-            //.setRayTracer(new SimpleRayTracer(new Scene("Test"))) //TODO: להסיר את ההערה
-            //.setImageWriter(new ImageWriter("Test", 1, 1))
+            .setRayTracer(new SimpleRayTracer(new Scene("Test")))
+            .setImageWriter(new ImageWriter("Test", 1, 1))
             .setLocation(Point.ZERO)
             .setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0))
             .setVpDistance(10);
