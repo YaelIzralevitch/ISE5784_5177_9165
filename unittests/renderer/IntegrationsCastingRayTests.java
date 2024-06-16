@@ -4,6 +4,8 @@ import geometries.*;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Vector;
+import scene.Scene;
+
 import java.util.LinkedList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Shir Perez and Yael Izralevitch
  */
 public class IntegrationsCastingRayTests {
+    private final Scene          scene  = new Scene("Test scene");
 
     private final Vector vUp = new Vector(0, -1, 0);
     private final Vector vTo = new Vector(0, 0, -1);
@@ -43,8 +46,20 @@ public class IntegrationsCastingRayTests {
      */
     @Test
     void testSphereIntegration() {
-        Camera camera1 = cameraBuilder.setLocation(Point.ZERO).setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0)).setVpDistance(1d).setVpSize(3d, 3d).build();
-        Camera camera2 = cameraBuilder.setLocation(new Point(0, 0, 0.5)).setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0)).setVpDistance(1d).setVpSize(3d, 3d).build();
+        Camera camera1 = cameraBuilder
+                .setLocation(Point.ZERO)
+                .setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0))
+                .setVpDistance(1d).setVpSize(3d, 3d)
+                .setImageWriter(new ImageWriter("render test", 1000, 1000))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .build();
+        Camera camera2 = cameraBuilder
+                .setLocation(new Point(0, 0, 0.5))
+                .setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0))
+                .setVpDistance(1d).setVpSize(3d, 3d)
+                .setImageWriter(new ImageWriter("render test", 1000, 1000))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .build();
 
         //TC01: Sphere r=1 (2 intersections)
         Sphere sphere = new Sphere(1d, new Point(0, 0, -3));
@@ -72,7 +87,13 @@ public class IntegrationsCastingRayTests {
      */
     @Test
     void testPlaneIntegration() {
-        Camera camera = cameraBuilder.setLocation(Point.ZERO).setDirection(new Vector(0, 0, 1), new Vector(0, -1, 0)).setVpDistance(1d).setVpSize(3d, 3d).build();
+        Camera camera = cameraBuilder
+                .setLocation(Point.ZERO)
+                .setDirection(new Vector(0, 0, 1), new Vector(0, -1, 0))
+                .setVpDistance(1d).setVpSize(3d, 3d)
+                .setImageWriter(new ImageWriter("render test", 1000, 1000))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .build();
 
         //TC01: The plane parallel to the View Plane (9 intersections)
         Plane plane = new Plane(new Point(0, 0, 5),
@@ -102,7 +123,13 @@ public class IntegrationsCastingRayTests {
      */
     @Test
     void testTriangleIntegration() {
-        Camera camera = cameraBuilder.setLocation(Point.ZERO).setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0)).setVpDistance(1d).setVpSize(3d, 3d).build();
+        Camera camera = cameraBuilder
+                .setLocation(Point.ZERO)
+                .setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0))
+                .setVpDistance(1d).setVpSize(3d, 3d)
+                .setImageWriter(new ImageWriter("render test", 1000, 1000))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .build();
 
         //TC01: Small triangle (1 intersection)
         Triangle triangle = new Triangle(new Point(1, -1, -2),

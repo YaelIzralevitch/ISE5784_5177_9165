@@ -113,4 +113,11 @@ public class Color {
 
     @Override
     public String toString() { return "rgb:" + rgb; }
+
+    /**
+     * rgb function
+     */
+    public Double3 getRgb() {
+        return rgb;
+    }
 }

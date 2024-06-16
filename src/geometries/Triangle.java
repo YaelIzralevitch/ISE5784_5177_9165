@@ -14,8 +14,9 @@ public class Triangle extends Polygon {
         super(p1, p2, p3);
     }
 
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         //Finding an intersection with the plane of the triangle
         List<Point> intersectionWithPlane =  this.plane.findIntersections(ray);
 
@@ -40,8 +41,10 @@ public class Triangle extends Polygon {
 
         //If all the scalar lines have the same sign - then the intersection with the plane cuts the triangle
         if((s1 < 0 && s2 < 0 && s3 < 0 ) || (s1 > 0 && s2 > 0 && s3 > 0))
-            return intersectionWithPlane;
+            return  List.of(new GeoPoint(this, intersectionWithPlane.getFirst()));;
 
         return null;
     }
+
+
 }

@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Composite class for all the geometries
  */
-public class Geometries implements Intersectable{
+public class Geometries extends Intersectable{
     final private List<Intersectable> geometries = new LinkedList<>();
 
     /**
@@ -38,15 +38,15 @@ public class Geometries implements Intersectable{
      * @return List of intersection points between the ray and the geometry.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> intersectionsPoints = null;
-        List<Point> geometryPoints; //intersections points in one geometry
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        List<GeoPoint> intersectionsPoints = null;
+        List<GeoPoint> geometryPoints; //intersections points in one geometry
 
         //The loop goes through the bodies and checks if each one has intersection points,
         //if so it will add them to geometryPoints collection
 
         for(Intersectable geometry: this.geometries) {
-            geometryPoints = geometry.findIntersections(ray);
+            geometryPoints = geometry.findGeoIntersections(ray);
             if(geometryPoints != null){
                 //if there are no Point in the intersectionsPoints collection yet
                 if(intersectionsPoints == null){
@@ -62,7 +62,14 @@ public class Geometries implements Intersectable{
 
         return intersectionsPoints
                 .stream()
-                .sorted(Comparator.comparingDouble(p -> p.distance(ray.getHead())))
+                .sorted(Comparator.comparingDouble(p -> p.point.distance(ray.getHead())))
                 .toList();
+    }
+
+    /**
+     * getGeometries function
+     */
+    public List<Intersectable> getGeometries() {
+        return geometries;
     }
 }

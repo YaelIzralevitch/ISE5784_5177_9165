@@ -5,14 +5,70 @@ import primitives.Ray;
 
 import java.util.*;
 /**
- * Intersectable interface for any geometric body
+ * Intersectable for any geometric body
  */
-public interface Intersectable {
+public abstract class Intersectable {
     /**
      * findIntersections function
      *
      * @param ray Ray
      * @return List of intersection points between the ray and the geometry.
      */
-    List<Point> findIntersections(Ray ray);
+    public List<Point> findIntersections(Ray ray) {
+        var geoList = findGeoIntersections(ray);
+        return geoList == null ? null : geoList.stream().map(gp -> gp.point).toList();
+    }
+
+    /**
+     * findGeoIntersections function:
+     * find all intersections points that intersect with a specific ray
+     * @param ray
+     * @return
+     */
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        return findGeoIntersectionsHelper(ray);
+    }
+
+    /**
+     * findIntersections helper
+     * @param ray
+     * @return
+     */
+    protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray);
+
+
+    /**
+     * PDS static internal helper class - GeoPoint
+     */
+    public static class GeoPoint {
+        public Geometry geometry;
+        public Point point;
+
+        /**
+         * Parameter constructor
+         *
+         * @param geometry
+         * @param point
+         */
+        public GeoPoint(Geometry geometry, Point point) {
+            this.geometry = geometry;
+            this.point = point;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            return (obj instanceof GeoPoint geoPoint)
+                    && this.geometry.equals(geoPoint.geometry)
+                    && this.point.equals(geoPoint.point);
+        }
+
+        @Override
+        public String toString() {
+            return "GeoPoint{" +
+                    "geometry=" + geometry +
+                    ", point=" + point +
+                    '}';
+        }
+    }
 }

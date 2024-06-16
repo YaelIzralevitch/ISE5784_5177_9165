@@ -6,9 +6,8 @@ import primitives.Double3;
 /**
  * This class contains functions and calculations on ambient light
  */
-public class AmbientLight {
+public class AmbientLight extends Light {
 
-    private final Color intensity;
     public static final AmbientLight NONE = new AmbientLight(Color.BLACK, 0);
 
     /**
@@ -17,7 +16,7 @@ public class AmbientLight {
      * @param Ka - Fill light attenuation coefficient
      */
     public AmbientLight(Color Ia, Double3 Ka){
-        intensity = Ia.scale(Ka);
+        super(Ia.scale(Ka));
     }
 
     /**
@@ -26,16 +25,7 @@ public class AmbientLight {
      * @param Ka - Fill light attenuation coefficient
      */
     public AmbientLight(Color Ia, double Ka){
-        intensity = Ia.scale(Ka);
+        super(Ia.scale(Ka));
     }
-
-    /**
-     * getIntensity function
-     * @return intensity
-     */
-    public Color getIntensity(){
-        return intensity;
-    }
-
 
 }

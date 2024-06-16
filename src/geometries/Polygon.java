@@ -15,13 +15,14 @@ import primitives.Vector;
  * system
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
    /** List of polygon's vertices */
    protected final List<Point> vertices;
    /** Associated plane in which the polygon lays */
    protected final Plane       plane;
    /** The size of the polygon - the amount of the vertices in the polygon */
    private final int           size;
+
 
    /**
     * Polygon constructor based on vertices list. The list must be ordered by edge
@@ -82,11 +83,18 @@ public class Polygon implements Geometry {
       }
    }
 
+   /**
+    * getVertices function
+    */
+   public List<Point> getVertices() {
+      return vertices;
+   }
+
    @Override
    public Vector getNormal(Point point) { return plane.getNormal(); }
 
    @Override
-   public List<Point> findIntersections(Ray ray) {
+   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
       //Finding an intersection with the plane of the Polygon
       List<Point> intersectionWithPlane =  this.plane.findIntersections(ray);
 
@@ -124,6 +132,6 @@ public class Polygon implements Geometry {
             return null;
          }
       }
-      return intersectionWithPlane;
+      return  List.of(new GeoPoint(this, intersectionWithPlane.getFirst()));
    }
 }
