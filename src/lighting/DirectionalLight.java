@@ -12,12 +12,13 @@ public class DirectionalLight extends Light implements LightSource{
     private Vector direction;
 
     /**
-     * Parameter constructor
-     *
+     * Parameters constructor
      * @param intensity
+     * @param direction
      */
-    protected DirectionalLight(Color intensity) {
+    public DirectionalLight(Color intensity, Vector direction) {
         super(intensity);
+        this.direction = direction.normalize();
     }
 
     /**
@@ -35,6 +36,6 @@ public class DirectionalLight extends Light implements LightSource{
      */
     @Override
     public Vector getL(Point p) {
-        return null;
+        return this.direction.normalize();
     }
 }
