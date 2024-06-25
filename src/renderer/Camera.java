@@ -70,28 +70,20 @@ public class Camera implements Cloneable {
         double Rx = width / nX;
         double Ry = height / nY;
 
-        Point Pij; //Pixel[i,j] center
-        double Yi = -(i - (nY - 1) / 2d) * Ry;
+        Point Pij = Pc; //Pixel[i,j] center
+        double Yi = - (i - (nY - 1) / 2d) * Ry;
         double Xj = (j - (nX - 1) / 2d) * Rx;
 
-        // Pixel[i,j] is the center of the view plane
-        if (isZero(Xj) && isZero(Yi)) {
-            Pij = Pc;
-            return new Ray(p0, Pij.subtract(p0));
-        }
         // Pixel[i,j] is in the middle column
-        if (isZero(Xj)) {
-            Pij = Pc.add(vUp.scale(Yi));
-            return new Ray(p0, Pij.subtract(p0));
+        if (!isZero(Yi)) {
+            Pij = Pij.add(vUp.scale(Yi));
         }
         //Pixel[i,j] is in the middle row
-        if (isZero(Yi)) {
-            Pij = Pc.add(vRight.scale(Xj));
-            return new Ray(p0, Pij.subtract(p0));
+        if (!isZero(Xj)) {
+            Pij = Pij.add(vRight.scale(Xj));
         }
 
-        Pij = Pc.add(vRight.scale(Xj).add(vUp.scale(Yi)));
-            return new Ray(p0, Pij.subtract(p0));
+        return new Ray(p0, Pij.subtract(p0));
     }
 
     /**
@@ -101,11 +93,13 @@ public class Camera implements Cloneable {
      */
     public Camera printGrid(int interval, Color color){
         Color pink = new Color(255d, 29d, 190d);
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
 
-        for(int i = 0; i < imageWriter.getNx(); i++){
-            for(int j = 0; j < imageWriter.getNy(); j++){
+        for(int i = 0; i < nY; i++){
+            for(int j = 0; j < nX; j++){
                 if(i % interval == 0 || j % interval == 0){
-                    imageWriter.writePixel(i, j, color);
+                    imageWriter.writePixel(j, i, color);
                 }
             }
         }
@@ -115,18 +109,19 @@ public class Camera implements Cloneable {
     /**
      * writeToImage function - Delegates the writeToImage function of imageWriter
      */
-    public Camera writeToImage(){
+    public void writeToImage() {
         imageWriter.writeToImage();
-        return this;
     }
 
     /**
      * renderImage function
      */
     public Camera renderImage(){
-        for(int i = 0; i < imageWriter.getNx(); i++){
-            for(int j = 0; j < imageWriter.getNy(); j++){
-                castRay(imageWriter.getNx(), imageWriter.getNy(), i, j);
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
+        for(int i = 0; i < nY; i++){
+            for(int j = 0; j < nX; j++){
+                castRay(nX, nY, j, i);
             }
         }
         return this;
@@ -150,7 +145,7 @@ public class Camera implements Cloneable {
      */
     public static class Builder {
 
-        final private Camera camera = new Camera();
+        private final Camera camera = new Camera();
 
         /**
          * setLocation function
@@ -213,7 +208,7 @@ public class Camera implements Cloneable {
 
         /**
          * setImageWriter function
-         * @param imageWriter
+         * @param imageWriter the image writer to set
          * @return this
          */
         public Builder setImageWriter(ImageWriter imageWriter) {
@@ -286,7 +281,7 @@ public class Camera implements Cloneable {
                 return (Camera) camera.clone();
             }
             catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
+                return null;
             }
         }
     }

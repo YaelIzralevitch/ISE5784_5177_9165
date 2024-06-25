@@ -6,7 +6,7 @@ import primitives.Color;
  * This class contains functions and calculations on light
  */
 abstract class Light {
-    protected Color intensity;
+    protected final Color intensity;
 
     /**
      * Parameter constructor
