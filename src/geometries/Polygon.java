@@ -94,9 +94,9 @@ public class Polygon extends Geometry {
    public Vector getNormal(Point point) { return plane.getNormal(); }
 
    @Override
-   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
       //Finding an intersection with the plane of the Polygon
-      List<Point> intersectionWithPlane =  this.plane.findIntersections(ray);
+      List<GeoPoint> intersectionWithPlane =  this.plane.findGeoIntersections(ray, maxDistance);
 
       if(intersectionWithPlane == null)
          return null;
@@ -132,6 +132,6 @@ public class Polygon extends Geometry {
             return null;
          }
       }
-      return  List.of(new GeoPoint(this, intersectionWithPlane.getFirst()));
+      return  List.of(new GeoPoint(this, intersectionWithPlane.getFirst().point));
    }
 }

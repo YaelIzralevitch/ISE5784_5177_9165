@@ -38,7 +38,7 @@ public class Geometries extends Intersectable{
      * @return List of intersection points between the ray and the geometry.
      */
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         List<GeoPoint> intersectionsPoints = null;
         List<GeoPoint> geometryPoints; //intersections points in one geometry
 
@@ -46,7 +46,7 @@ public class Geometries extends Intersectable{
         //if so it will add them to geometryPoints collection
 
         for(Intersectable geometry: this.geometries) {
-            geometryPoints = geometry.findGeoIntersections(ray);
+            geometryPoints = geometry.findGeoIntersections(ray, maxDistance);
             if(geometryPoints != null){
                 //if there are no Point in the intersectionsPoints collection yet
                 if(intersectionsPoints == null){

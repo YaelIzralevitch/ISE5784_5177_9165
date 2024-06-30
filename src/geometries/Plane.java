@@ -70,7 +70,7 @@ public class Plane extends Geometry {
     }
 
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         //If the ray starts at a point representing the plane
         if(this.q.equals(ray.getHead()))
             return null;
@@ -82,9 +82,9 @@ public class Plane extends Geometry {
         if(isZero(t2))
             return null;
 
-        double t = t1 / t2;
+        double t = alignZero(t1 / t2);
 
-        if(alignZero(t) > 0) {
+        if((alignZero(t) > 0) && alignZero(t - maxDistance) <= 0) {
             return List.of(new GeoPoint(this, ray.getPoint(t)));
         }
         return null ;
