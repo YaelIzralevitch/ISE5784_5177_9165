@@ -18,7 +18,9 @@ public class SimpleRayTracer extends RayTracerBase {
     /**
      * The distance of moving the ray head when needed
      */
-    private static final double DELTA = 0.1;
+    private static final int MAX_CALC_COLOR_LEVEL = 10;
+    private static final double MIN_CALC_COLOR_K = 0.001;
+    private static final Double3 INITIAL_K = Double3.ONE;
 
     /**
      * Parameter constructor
@@ -43,12 +45,29 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * calcColor function
-     * @param gp
-     * @param ray
+     * The method implements Simple Phong Reflectance model for calculating a point color.
+     * @param gp point and its geometry
+     * @param ray  incoming ray
      */
     private Color calcColor(GeoPoint gp, Ray ray){
-        return scene.ambientLight.getIntensity().add(calcLocalEffects(gp, ray));
+        return calcColor(gp, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K)
+                .add(scene.ambientLight.getIntensity());
+    }
+
+    /**
+     * The method implements Simple Phong Reflectance model for calculating a point
+     * color.
+     *
+     * @param gp point and its geometry
+     * @param ray incoming ray
+     * @param level remaining levels for recursion
+     * @param k accumulated attenuation factor for recursion
+     * @return the final color
+     */
+    private Color calcColor(GeoPoint gp, Ray ray, int level, Double3 k) {
+        Color color = calcLocalEffects(gp, ray, k);
+        return 1 == level ? color
+                : color.add(calcGlobalEffects(gp, ray, level, k));
     }
 
     /**
@@ -80,6 +99,59 @@ public class SimpleRayTracer extends RayTracerBase {
             }
         }
         return color;
+    }
+
+    /**
+     * Calculate global effects for the point color
+     * @param gp    geoPoint
+     * @param ray     ray
+     * @param level recursion level
+     * @param k   triple attenuation factor of reflection/refraction
+     * @return the global effects color
+    */
+    private Color calcGlobalEffects(GeoPoint gp, Ray ray, int level, Double3 k) {
+        Material material = gp.geometry.getMaterial();
+        return calcGlobalEffects(constructRefractedRay(gp, ray), material.kR,level, k)
+                .add(calcGlobalEffects(constructReflectedRay(gp, ray), material.kT,level, k));
+    }
+
+    /**
+     * Function to construct transparency ray
+     * @param point point
+     * @param v  ray direction
+     * @param n  normal
+     * @return new refracted ray
+    */
+    private Ray constructRefractedRay(Point point, Vector v, Vector n) {
+        return new Ray(point, v, n);
+    }
+
+    /**
+     * Function to construct reflected ray
+     * @param point point
+     * @param v  ray direction
+     * @param n  normal
+     * @return new reflected ray
+    */
+    private Ray constructReflectedRay(Point point, Vector v, Vector n) {
+        return new Ray(point,
+                       v.subtract(n.scale(2 * v.dotProduct(n))),
+                       n);
+    }
+
+    /**
+     * Calculate a global effect - reflection or refraction
+     * @param ray   reflected\refracted ray
+     * @param level recursion level
+     * @param k     accumulated recursion attenuation factor
+     * @param kx    reflection/refraction attenuation factor
+     * @return the global effect color
+    */
+    private Color calcGlobalEffect(Ray ray, Double3 kx, int level, Double3 k) {
+        Double3 kkx = kx.product(k);
+        if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
+        GeoPoint gp = findClosestIntersection(ray);
+        return (gp == null ? scene.background :calcColor(gp, ray, level - 1, kkx)).scale(kx);
     }
 
 
@@ -129,16 +201,15 @@ public class SimpleRayTracer extends RayTracerBase {
     private boolean unshaded(GeoPoint gp, LightSource light, Vector l, Vector n) {
         Vector lightDirection = l.scale(-1); // from point to light source
         double nl = l.dotProduct(n);
-        Vector deltaVector = n.scale(nl < 0 ? DELTA : -DELTA);
-        Point p0 = gp.point.add(deltaVector);
-        Ray ray = new Ray(p0, lightDirection);
+        Ray ray = new Ray(gp.point, lightDirection, n);
 
         //Checking whether the intersection points are between the light and geo point - gp
         double distanceFromLight = light.getDistance(gp.point);
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, distanceFromLight);
 
-        if (intersections == null) return true;
+        if(intersections == null) return true;
 
         return false;
     }
+
 }

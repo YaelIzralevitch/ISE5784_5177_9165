@@ -8,6 +8,7 @@ import geometries.Intersectable.GeoPoint;
  * This class contains functions and calculations on a Ray
  */
 public class Ray {
+    private static final double DELTA = 0.1;
     private final Point head;
     private final Vector direction;
 
@@ -17,6 +18,19 @@ public class Ray {
     public Ray(Point head, Vector direction) {
         this.head = head;
         this.direction = direction.normalize();
+    }
+
+    /**
+     * Constructs a new Ray object with movement of DELTA.
+     *
+     * @param head  The starting point of the ray.
+     * @param direction The direction of the ray, as a vector.
+     * @param n vector for head movement.
+     */
+    public Ray(Point head, Vector direction, Vector n) {
+        double delta = direction.dotProduct(n) >= 0 ? DELTA : -DELTA;
+        this.head = head.add(n.scale(delta));
+        this.direction = direction;
     }
 
     /**
