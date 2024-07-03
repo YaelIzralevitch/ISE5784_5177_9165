@@ -270,8 +270,8 @@ public class imageLevel7Tests {
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)));
 
 
-        scene.lights.add( //
-                new SpotLight(new Color(1000, 600, 0), new Point(-250, 400, 1000), new Vector(-1, -1, -2)) //
+        scene.lights.add( //new Point(-250, 400, -300), new Vector(250, -410, 250)
+                new SpotLight(new Color(1000, 600, 0), new Point(-250, 400, -100), new Vector(250, -410, 50)) //
                         .setkL(0.0004).setkQ(0.0000006));
 
 
