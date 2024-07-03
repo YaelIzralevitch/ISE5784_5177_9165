@@ -30,8 +30,7 @@ public class imageLevel7Tests {
                 .setVpSize(150, 150).setVpDistance(1000);
 
 
-        scene.background = new Color(java.awt.Color.CYAN);
-
+        scene.background = new Color(93, 151, 191);
         scene.geometries.add( //
                 new Sphere(25, new Point(30, -20, -50)) //
                         .setEmission(new Color(155, 182, 224)) //
