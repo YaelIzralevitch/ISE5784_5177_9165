@@ -25,28 +25,61 @@ public class imageLevel7Tests {
     public void finalProject() {
         Camera.Builder camera = Camera.getBuilder()
                 .setRayTracer(new SimpleRayTracer(scene))
-                .setLocation(new Point(0, 0, 1000))
+                .setLocation(new Point(0, 0, 1300))
                 .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
                 .setVpSize(150, 150).setVpDistance(1000);
 
 
         scene.background = new Color(93, 151, 191);
         scene.geometries.add( //
+                //snowman
                 new Sphere(25, new Point(30, -20, -50)) //
                         .setEmission(new Color(155, 182, 224)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.1)),
-                new Sphere(2.5, new Point(32, 20, -37)) //
+                new Sphere(2.5, new Point(32, 20, -37)) //eyes
                         .setEmission(new Color(java.awt.Color.BLACK)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
-                new Sphere(2.5, new Point(20, 20, -40)) //
+                new Sphere(2.5, new Point(20, 20, -40)) //eyes
                         .setEmission(new Color(java.awt.Color.BLACK)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
+                new Sphere(15, new Point(30, 15, -50)) //
+                        .setEmission(new Color(155, 182, 224)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.1)),
+                //nose
+                new Triangle(new Point(18, 12, -25), new Point(28, 12, -35), new Point(25, 17, -35)) //
+                        .setEmission(new Color(219, 124, 15))
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                //snowman's hands
+                new Polygon(new Point(48, -10, -30), new Point(48, -12, -30), new Point(65, 0, -30),
+                        new Point(65, 2, -30)) //
+                        .setEmission(new Color(java.awt.Color.BLACK)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Polygon(new Point(-7, 2, -55), new Point(-7, 0, -55), new Point(10, -12, -55),
+                        new Point(10, -10, -55)) //
+                        .setEmission(new Color(java.awt.Color.BLACK)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                //buttons
+                new Sphere(2.8, new Point(20, -6, -29)) //
+                        .setEmission(new Color(java.awt.Color.RED)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
+                new Sphere(2.8, new Point(17, -18, -28)) //
+                        .setEmission(new Color(java.awt.Color.RED)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
+                new Sphere(2.8, new Point(20, -30, -29)) //
+                        .setEmission(new Color(java.awt.Color.RED)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
+
+                //crystal ball
                 new Sphere(80, new Point(0, -10, -50)).setEmission(new Color(java.awt.Color.GRAY)) //
-                        .setMaterial(new Material().setkD(0).setkS(0.8).setnShininess(30).setkT(0.5)),
-                new Polygon(new Point(-120, 20, -400), new Point(120, 20, -400), new Point(75, -120, 400),
-                        new Point(-75, -120, 400)) //
+                        .setMaterial(new Material().setkD(0).setkS(1.0).setnShininess(30).setkT(0.5)),
+
+                //plane
+                new Polygon(new Point(-140, 20, -400), new Point(140, 20, -400), new Point(120, -120, 400),
+                        new Point(-120, -120, 400)) //
                         .setEmission(new Color(125, 158, 209)) //
                         .setMaterial(new Material().setkR(0.2)),
+
+                //tree
                 new Triangle(new Point(-50, 15, -50), new Point(-32.5, 50, -50), new Point(-15, 23, -50)) //
                         .setEmission(new Color(11, 82, 31)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
@@ -62,26 +95,8 @@ public class imageLevel7Tests {
                 new Triangle(new Point(-70, -45, -50), new Point(-32.5, -8, -50), new Point(5, -35, -50)) //
                         .setEmission(new Color(11, 82, 31)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(18, 12, -25), new Point(28, 12, -35), new Point(25, 17, -35)) //
-                        .setEmission(new Color(219, 124, 15)) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Sphere(2.8, new Point(20, -6, -29)) //
-                        .setEmission(new Color(java.awt.Color.RED)) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
-                new Sphere(2.8, new Point(17, -18, -28)) //
-                        .setEmission(new Color(java.awt.Color.RED)) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
-                new Sphere(2.8, new Point(20, -30, -29)) //
-                        .setEmission(new Color(java.awt.Color.RED)) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
-                new Polygon(new Point(48, -10, -30), new Point(48, -12, -30), new Point(65, 0, -30),
-                        new Point(65, 2, -30)) //
-                        .setEmission(new Color(java.awt.Color.BLACK)) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Polygon(new Point(-7, 2, -55), new Point(-7, 0, -55), new Point(10, -12, -55),
-                        new Point(10, -10, -55)) //
-                        .setEmission(new Color(java.awt.Color.BLACK)) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+
+                //snowflakes
                 new Sphere(1, new Point(60, 20, -20)) //
                         .setEmission(new Color(155, 182, 224)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
@@ -252,10 +267,8 @@ public class imageLevel7Tests {
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
                 new Sphere(1, new Point(-52, 32, -20)) //
                         .setEmission(new Color(155, 182, 224)) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)),
-                new Sphere(15, new Point(30, 15, -50)) //
-                        .setEmission(new Color(155, 182, 224)) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.1)));
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)));
+
 
         scene.lights.add( //
                 new SpotLight(new Color(1000, 600, 0), new Point(-250, 400, 1000), new Vector(-1, -1, -2)) //
