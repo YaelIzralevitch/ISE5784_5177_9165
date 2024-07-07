@@ -83,16 +83,50 @@ public class imageLevel7Tests {
                 new Triangle(new Point(-50, 15, -50), new Point(-32.5, 50, -50), new Point(-15, 23, -50)) //
                         .setEmission(new Color(11, 82, 31)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-50, 15, -50), new Point(-32.5, 50, -50), new Point(-26.5,18.5,-39)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-50, 15, -50), new Point(-15, 23, -50), new Point(-26.5,18.5,-39)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+
                 new Triangle(new Point(-55, 0, -50), new Point(-32.5, 35, -50), new Point(-10, 8, -50)) //
                         .setEmission(new Color(11, 82, 31)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-55, 0, -50), new Point(-32.5, 35, -50), new Point(-32,-2,-35)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-55, 0, -50), new Point(-10, 8, -50), new Point(-32,-2,-35)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+
                 new Triangle(new Point(-60, -15, -50), new Point(-32.5, 22, -50), new Point(-5, -5, -50)) //
                         .setEmission(new Color(11, 82, 31)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-60, -15, -50), new Point(-32.5, 22, -50), new Point(-22,-11.5,-36)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-60, -15, -50), new Point(-5, -5, -50), new Point(-22,-11.5,-36)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+
                 new Triangle(new Point(-65, -30, -50), new Point(-32.5, 7, -50), new Point(0, -20, -50)) //
                         .setEmission(new Color(11, 82, 31)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-65, -30, -50), new Point(-32.5, 7, -50), new Point(-30,-32,-31)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-65, -30, -50), new Point(0, -20, -50), new Point(-30,-32,-31)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+
                 new Triangle(new Point(-70, -45, -50), new Point(-32.5, -8, -50), new Point(5, -35, -50)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-70, -45, -50), new Point(-32.5, -8, -50), new Point(-24.5, -45.5, -25)) //
+                        .setEmission(new Color(11, 82, 31)) //
+                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
+                new Triangle(new Point(-70, -45, -50), new Point(5, -35, -50), new Point(-24.5, -45.5, -25)) //
                         .setEmission(new Color(11, 82, 31)) //
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
 
