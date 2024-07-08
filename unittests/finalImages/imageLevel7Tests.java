@@ -2,6 +2,7 @@ package finalImages;
 
 import geometries.*;
 import lighting.AmbientLight;
+import lighting.PointLight;
 import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 import primitives.Color;
@@ -12,7 +13,7 @@ import scene.*;
 import primitives.*;
 import renderer.*;
 
-import static java.awt.Color.WHITE;
+import static java.awt.Color.*;
 
 
 public class imageLevel7Tests {
@@ -25,8 +26,8 @@ public class imageLevel7Tests {
     public void finalProject() {
         Camera.Builder camera = Camera.getBuilder()
                 .setRayTracer(new SimpleRayTracer(scene))
-                .setLocation(new Point(0, 0, 1300))
-                .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
+                .setLocation(new Point(200, 0, 2500))
+                .setDirection(new Vector(-200,-10,-2550), new Vector(0, 255, -1))
                 .setVpSize(150, 150).setVpDistance(1000);
 
 
@@ -74,10 +75,30 @@ public class imageLevel7Tests {
                         .setMaterial(new Material().setkD(0).setkS(1.0).setnShininess(30).setkT(0.5)),
 
                 //plane
-                new Polygon(new Point(-140, 20, -400), new Point(140, 20, -400), new Point(120, -120, 400),
-                        new Point(-120, -120, 400)) //
+                new Polygon(new Point(-400,20,-400), new Point(400, 20, -400), new Point(500,-200,800),
+                        new Point(-500,-200,800)) //
                         .setEmission(new Color(125, 158, 209)) //
                         .setMaterial(new Material().setkR(0.2)),
+
+                new Polygon(new Point(205.02,158.75,400), new Point(-194.98,158.75,400), new Point(-194.98,158.75,-250),
+                        new Point(205.02,158.75,-250)) //
+                        .setEmission(new Color(100,100,100)) //
+                        .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(400)),
+
+                new Polygon(new Point(-194.98,158.75,150), new Point(-194.98,158.75,-250), new Point(-194.98,-241.25,-250),
+                        new Point(-194.98,-241.25,150)) //
+                        .setEmission(new Color(69,55,245)) //
+                        .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(400)),
+/*
+                new Polygon(new Point(205.02,158.75,150), new Point(205.02,-241.25,150), new Point(205.02,-241.25,-250),
+                        new Point(205.02,158.75,-250)) //
+                        .setEmission(new Color(yellow)) //
+                        .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(301)),
+*/
+                new Polygon(new Point(-194.98,158.75,-250), new Point(-194.98,-241.25,-250), new Point(205.02,-241.25,-250),
+                        new Point(205.02,158.75,-250)) //
+                        .setEmission(new Color(100,100,200)) //
+                        .setMaterial(new Material().setkR(0.2).setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(400)),
 
                 //tree
                 new Triangle(new Point(-50, 15, -50), new Point(-32.5, 50, -50), new Point(-15, 23, -50)) //
@@ -304,10 +325,16 @@ public class imageLevel7Tests {
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100).setkT(0.3)));
 
 
-        scene.lights.add( //new Point(-250, 400, -300), new Vector(250, -410, 250)
-                new SpotLight(new Color(1000, 600, 0), new Point(-250, 400, -100), new Vector(250, -410, 50)) //
-                        .setkL(0.0004).setkQ(0.0000006));
+        scene.lights.add(
+                new SpotLight(new Color(1000, 600, 0), new Point(-161,72,-36), new Vector(161,-82,-14)) //
+                        .setkL(0.0004).setkQ(0.0000006).setNarrowBeam(10));
+        /*
+        scene.lights.add(
+                new PointLight(new Color(1000, 600, 0), new Point(114.40793,129.07386,-222.3377))
+                        .setkL(0.0004).setkQ(0.000006));
 
+
+         */
 
         camera.setImageWriter(new ImageWriter("FinalProject", 500, 500)) //
                 .build() //
