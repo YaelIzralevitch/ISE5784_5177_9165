@@ -76,18 +76,18 @@ public class imageLevel7Tests {
 
                 //plane
                 new Polygon(new Point(-400,20,-400), new Point(400, 20, -400), new Point(500,-200,800),
-                        new Point(-500,-200,800)) //
+                        new Point(-500,-200,800)) // floor
                         .setEmission(new Color(125, 158, 209)) //
                         .setMaterial(new Material().setkR(0.2)),
 
                 new Polygon(new Point(205.02,158.75,400), new Point(-194.98,158.75,400), new Point(-194.98,158.75,-250),
-                        new Point(205.02,158.75,-250)) //
-                        .setEmission(new Color(100,100,100)) //
+                        new Point(205.02,158.75,-250)) // roof
+                        .setEmission(new Color(146,146,146)) //
                         .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(400)),
 
                 new Polygon(new Point(-194.98,158.75,150), new Point(-194.98,158.75,-250), new Point(-194.98,-241.25,-250),
                         new Point(-194.98,-241.25,150)) //
-                        .setEmission(new Color(69,55,245)) //
+                        .setEmission(new Color(84,178,26)) //left
                         .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(400)),
 /*
                 new Polygon(new Point(205.02,158.75,150), new Point(205.02,-241.25,150), new Point(205.02,-241.25,-250),
@@ -97,7 +97,7 @@ public class imageLevel7Tests {
 */
                 new Polygon(new Point(-194.98,158.75,-250), new Point(-194.98,-241.25,-250), new Point(205.02,-241.25,-250),
                         new Point(205.02,158.75,-250)) //
-                        .setEmission(new Color(100,100,200)) //
+                        .setEmission(new Color(93, 151, 191)) // front
                         .setMaterial(new Material().setkR(0.2).setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(400)),
 
                 //tree
