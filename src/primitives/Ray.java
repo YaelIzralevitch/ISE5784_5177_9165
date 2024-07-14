@@ -62,7 +62,7 @@ public class Ray {
     }
 
     /**
-     * The method calculates a point on the line of the beam, at a distance given by the head of the fund
+     * The method calculates a point on the line of the ray, at a distance given by the head of the fund
      * @param t number
      */
     public Point getPoint(double t){

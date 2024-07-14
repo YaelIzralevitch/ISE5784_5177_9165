@@ -6,6 +6,8 @@ import primitives.Ray;
 import primitives.Vector;
 import renderer.RayTracerBase;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import static primitives.Util.*;
@@ -25,6 +27,9 @@ public class Camera implements Cloneable {
 
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
+
+    /* isAntiAliasing */
+    private boolean isAntiAliasing = false;
 
 
     public Point getP0() { return p0; }
@@ -127,17 +132,119 @@ public class Camera implements Cloneable {
         return this;
     }
 
+
     /**
-     * castRay function
-     * @param nX
-     * @param nY
-     * @param i
-     * @param j
+     * castRay function - Returns the color of a single pixel
+     * @param nX Image resolution
+     * @param nY Image resolution
+     * @param i The pixel index
+     * @param j The pixel index
      */
     private void castRay(int nX, int nY, int i, int j){
-        Ray ray = constructRay(nX, nY, i, j);
-        Color color = rayTracer.traceRay(ray);
+        Ray centerRay = constructRay(nX, nY, i, j);
+        Color color;
+        if(isAntiAliasing){
+            Point pc =centerRay.getPoint(this.distance); //pixel center
+            double pixelHeight = alignZero(this.height / nY);
+            double pixelWidth = alignZero(this.width / nX);
+
+            color = constructRays(pixelWidth, pixelHeight, pc, vRight, vUp, p0);
+        }
+        else {
+            color = rayTracer.traceRay(centerRay);
+        }
         imageWriter.writePixel(i, j, color);
+    }
+
+    private final int N = 10;
+    private final int M = 10;
+
+    /**
+     * The function sends a sample of rays through a single pixel and returns the color of the pixel
+     * by averaging the colors of all the rays.
+     * @param pixelWidth pixel width
+     * @param pixelHeight pixel height
+     */
+    public Color constructRays(double pixelWidth, double pixelHeight, Point pixelCenter, Vector vUp, Vector vRight, Point p0){
+        List<Color> colors = new LinkedList<>();
+        Ray[][] rays = constructRaysGrid(pixelWidth, pixelHeight, pixelCenter, vUp, vRight, p0);
+        //Finding the colors of each ray
+        for(Ray[] rayC : rays){
+            for(Ray rayR : rayC){
+                colors.add(rayTracer.traceRay(rayR));
+            }
+        }
+        return average_colors(colors);
+
+    }
+
+    /**
+     * This function get a ray launched in the center of a pixel and launch a beam n * m others rays
+     * on the same pixel
+     * @param pixelWidth pixel width
+     * @param pixelHeight pixel height
+     * @param pixelCenter the center of the pixel Point
+     * @return list of rays when every ray is launched inside a pixel with random emplacement
+     */
+    public Ray[][] constructRaysGrid(double pixelWidth, double pixelHeight, Point pixelCenter, Vector vUp, Vector vRight, Point p0) {
+
+        Ray[][] rays = new Ray[N][M]; //grid for rays
+
+        //We call the function constructRay but this time we launch m * n ray in the same pixel
+        for (int c = 0; c < N; c++) {
+            for (int r = 0; r< M; r++) {
+                rays[c][r] = constructRay(r, c, pixelHeight, pixelWidth, pixelCenter, vUp, vRight, p0);
+            }
+        }
+        return rays;
+    }
+
+
+    /**
+     * The function constructs a ray from Camera location through a point (i,j) on the grid of a
+     * pixel in the view plane
+     *
+     * @param c      pixel grid's height
+     * @param r      pixel grid's width
+     * @param pixelH height of the pixel
+     * @param pixelW width of the pixel
+     * @param pc     pixel center
+     * @return the ray through pixel's center
+     */
+    private Ray constructRay(double r, double c, double pixelH, double pixelW, Point pc, Vector vUp, Vector vRight, Point p0) {
+        Point Pij = pc;
+        //pixelH = height / nY
+        double rY = pixelH / N;
+        //pixelW = weight / nX
+        double rX = pixelW / M;
+
+        double xR = (r - ((M - 1) / 2d)) * rX;
+        double yC = -(c - ((N - 1) / 2d)) * rY;
+
+        if (xR != 0) {
+            pc = pc.add(vRight.scale(xR));
+        }
+        if (yC != 0) {
+            Pij = Pij.add(vUp.scale(yC));
+        }
+
+        //get vector from camera location p0 to the point
+        Vector rayVector = Pij.subtract(p0);
+
+        //return ray to the center of the pixel
+        return new Ray(p0, rayVector);
+
+    }
+
+    /**
+     * Calculates the average of all the colors in the list
+     * @param colors list of Color
+     */
+    private Color average_colors(List<Color> colors){
+        Color[] colorsArray = colors.toArray(new Color[0]);
+        Color initColor = Color.BLACK;
+        Color colorsSum = initColor.add(colorsArray);
+        return colorsSum.reduce(colors.size());
     }
 
     /**
@@ -223,6 +330,16 @@ public class Camera implements Cloneable {
          */
         public Builder setRayTracer(RayTracerBase rayTracer) {
             camera.rayTracer = rayTracer;
+            return this;
+        }
+
+        /**
+         * setIsAntiAliasing function - Do the improvement Anti-aliasing or not
+         * @param isAntiAliasing
+         * @return this
+         */
+        public Builder setIsAntiAliasing(boolean isAntiAliasing) {
+            camera.isAntiAliasing = isAntiAliasing;
             return this;
         }
 
