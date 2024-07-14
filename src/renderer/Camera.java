@@ -148,7 +148,7 @@ public class Camera implements Cloneable {
             double pixelHeight = alignZero(this.height / nY);
             double pixelWidth = alignZero(this.width / nX);
 
-            color = constructRays(pixelWidth, pixelHeight, pc, vRight, vUp, p0);
+            color = constructRays(pixelWidth, pixelHeight, pc);
         }
         else {
             color = rayTracer.traceRay(centerRay);
@@ -165,9 +165,9 @@ public class Camera implements Cloneable {
      * @param pixelWidth pixel width
      * @param pixelHeight pixel height
      */
-    public Color constructRays(double pixelWidth, double pixelHeight, Point pixelCenter, Vector vUp, Vector vRight, Point p0){
+    public Color constructRays(double pixelWidth, double pixelHeight, Point pixelCenter){
         List<Color> colors = new LinkedList<>();
-        Ray[][] rays = constructRaysGrid(pixelWidth, pixelHeight, pixelCenter, vUp, vRight, p0);
+        Ray[][] rays = constructRaysGrid(pixelWidth, pixelHeight, pixelCenter);
         //Finding the colors of each ray
         for(Ray[] rayC : rays){
             for(Ray rayR : rayC){
@@ -186,14 +186,14 @@ public class Camera implements Cloneable {
      * @param pixelCenter the center of the pixel Point
      * @return list of rays when every ray is launched inside a pixel with random emplacement
      */
-    public Ray[][] constructRaysGrid(double pixelWidth, double pixelHeight, Point pixelCenter, Vector vUp, Vector vRight, Point p0) {
+    public Ray[][] constructRaysGrid(double pixelWidth, double pixelHeight, Point pixelCenter) {
 
         Ray[][] rays = new Ray[N][M]; //grid for rays
 
         //We call the function constructRay but this time we launch m * n ray in the same pixel
         for (int c = 0; c < N; c++) {
             for (int r = 0; r< M; r++) {
-                rays[c][r] = constructRay(r, c, pixelHeight, pixelWidth, pixelCenter, vUp, vRight, p0);
+                rays[c][r] = constructRay(r, c, pixelHeight, pixelWidth, pixelCenter);
             }
         }
         return rays;
@@ -211,7 +211,7 @@ public class Camera implements Cloneable {
      * @param pc     pixel center
      * @return the ray through pixel's center
      */
-    private Ray constructRay(double r, double c, double pixelH, double pixelW, Point pc, Vector vUp, Vector vRight, Point p0) {
+    private Ray constructRay(double r, double c, double pixelH, double pixelW, Point pc) {
         Point Pij = pc;
         //pixelH = height / nY
         double rY = pixelH / N;
