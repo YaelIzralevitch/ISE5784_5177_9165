@@ -1,5 +1,8 @@
 package renderer;
 
+import primitives.Color;
+import primitives.Ray;
+
 /**
  * Functionality union class for Adaptive SuperSampling
  */
@@ -35,4 +38,5 @@ public class AdaptiveSuperSampling {
     public void setDepth(int depth) {
         this.depth = depth;
     }
+
 }

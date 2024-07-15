@@ -156,20 +156,32 @@ public class Camera implements Cloneable {
     private void castRay(int nX, int nY, int i, int j){
         Ray centerRay = constructRay(nX, nY, i, j);
         Color color;
+        //Anti aliasing improvement
         if(sampleRays.isAntiAliasing()){
             Point pc =centerRay.getPoint(this.distance); //pixel center
             double pixelHeight = alignZero(this.height / nY);
             double pixelWidth = alignZero(this.width / nX);
+            Ray[][] rays = constructRaysGrid(pixelWidth, pixelHeight, pc);
 
-            color = constructRays(pixelWidth, pixelHeight, pc);
-        }
-        else if(adaptiveSS.isASS()) {
-            Color lu =rayTracer.traceRay(rays[0][0], adaptiveSS.isASS(), adaptiveSS.getDepth());
-            Color ld = rayTracer.traceRay(rays[_N - 1][0], adaptiveSS.isASS(), adaptiveSS.getDepth());
-            Color ru = rayTracer.traceRay(rays[0][_M - 1], adaptiveSS.isASS(), adaptiveSS.getDepth());
-            Color rd = rayTracer.traceRay(rays[_N - 1][_M - 1], adaptiveSS.isASS(), adaptiveSS.getDepth());
-        }
+            if(!adaptiveSS.isASS())
+                color = constructRays(rays);
 
+            else //Improving Performance with adaptive super sampling
+             {
+                int _N = sampleRays.getN();
+                int _M = sampleRays.getM();
+                // The color sample of the four corners of the pixel
+                Color lu =rayTracer.traceRay(rays[0][0]);
+                Color ld = rayTracer.traceRay(rays[_N - 1][0]);
+                Color ru = rayTracer.traceRay(rays[0][_M - 1]);
+                Color rd = rayTracer.traceRay(rays[_N - 1][_M - 1]);
+
+                 if (lu.equals(ld) && lu.equals(ru) && lu.equals(rd))
+                     color = lu;
+                 else
+                     color = adaptiveSSRecursive(rays, lu, ld, ru, rd, 0, 0, _N - 1, _M - 1, adaptiveSS.getDepth());
+            }
+        }
         else {
             color = rayTracer.traceRay(centerRay);
         }
@@ -180,12 +192,10 @@ public class Camera implements Cloneable {
     /**
      * The function sends a sample of rays through a single pixel and returns the color of the pixel
      * by averaging the colors of all the rays.
-     * @param pixelWidth pixel width
-     * @param pixelHeight pixel height
+     * @param rays grid of rays
      */
-    public Color constructRays(double pixelWidth, double pixelHeight, Point pixelCenter){
+    public Color constructRays(Ray[][] rays){
         List<Color> colors = new LinkedList<>();
-        Ray[][] rays = constructRaysGrid(pixelWidth, pixelHeight, pixelCenter);
         //Finding the colors of each ray
         for(Ray[] rayC : rays){
             for(Ray rayR : rayC){
@@ -219,6 +229,58 @@ public class Camera implements Cloneable {
         return rays;
     }
 
+    /**
+     * the function helps castRay to get the color with super sampling
+     *
+     * @param rays        the matrix of rays from the pixel
+     * @param lu          the left up point
+     * @param ld          the left down point
+     * @param ru          the right up point
+     * @param rd          the right down point
+     * @param x1lu        index x of left up
+     * @param y1lu        index y of left up
+     * @param x2rd        index x of right down
+     * @param y2rd        index y of right down
+     * @param depth       the deep of the recursion
+     * @return the color in the pixel
+     */
+    public Color adaptiveSSRecursive(Ray[][] rays, Color lu, Color ld, Color ru, Color rd, int x1lu, int y1lu, int x2rd, int y2rd, int depth){
+        if (depth == 0)
+            return lu;
+
+        Color col = Color.BLACK;
+        int middleX = (x1lu + x2rd) / 2;
+        int middleY = (y1lu + y2rd) / 2;
+
+        // Five more points for dividing the square into four squares
+        Color mu = rayTracer.traceRay(rays[x1lu][middleY]);
+        Color md = rayTracer.traceRay(rays[x2rd][middleY]);
+        Color mm = rayTracer.traceRay(rays[middleX][middleY]);
+        Color lm = rayTracer.traceRay(rays[middleX][y1lu]);
+        Color rm = rayTracer.traceRay(rays[middleX][y2rd]);
+
+        // If all the corners of any subsquare are the same color - add the color to calculate the average colors
+        // Otherwise, a recursive call on the subsquare
+        if (lu.equals(mu) && lu.equals(mm) && lu.equals(lm))
+            col = col.add(lu);
+        else
+            col = col.add(adaptiveSSRecursive(rays, lu, lm, mu, mm, x1lu, y1lu, middleX, middleY, depth - 1));
+        if (mu.equals(ru) && mu.equals(mm) && mu.equals(rm))
+            col = col.add(mu);
+        else
+            col = col.add(adaptiveSSRecursive(rays, mu, mm, ru, rm, x1lu, middleY, middleX, y2rd, depth - 1));
+        if (lm.equals(mm) && lm.equals(ld) && lm.equals(md))
+            col = col.add(lm);
+        else
+            col = col.add(adaptiveSSRecursive(rays, lm, ld, mm, md, middleX, y1lu, x2rd, middleY, depth - 1));
+        if (mm.equals(rm) && mm.equals(md) && mm.equals(rd))
+            col = col.add(mm);
+        else
+            col = col.add(adaptiveSSRecursive(rays, mm, md, rm, rd, middleX, middleY, x2rd, y2rd,depth - 1));
+
+        // Calculating the average of the colors
+        return col.reduce(4);
+    }
 
     /**
      * The function constructs a ray from Camera location through a point (i,j) on the grid of a
@@ -335,12 +397,22 @@ public class Camera implements Cloneable {
         }
 
         /**
-         * setImageWriter function
-         * @param sampleRays the image writer to set
+         * setSampleRays function
+         * @param sampleRays the sample rays to set
          * @return this
          */
         public Builder setSampleRays(SampleRays sampleRays) {
             camera.sampleRays = sampleRays;
+            return this;
+        }
+
+        /**
+         * setAdaptiveSuperSampling function
+         * @param adaptiveSuperSampling the adaptive super sampling to set
+         * @return this
+         */
+        public Builder setAdaptiveSuperSampling(AdaptiveSuperSampling adaptiveSuperSampling) {
+            camera.adaptiveSS = adaptiveSuperSampling;
             return this;
         }
 

@@ -8,13 +8,10 @@ import lighting.PointLight;
 import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
-import renderer.Camera;
-import renderer.ImageWriter;
-import renderer.SampleRays;
-import renderer.SimpleRayTracer;
+import renderer.*;
 import scene.Scene;
 
-public class MiniProject1 {
+public class MiniProject2 {
 
     private Scene scene = new Scene("Test scene");
 
@@ -25,7 +22,7 @@ public class MiniProject1 {
 
 
     @Test
-    public void MP1() {
+    public void MP2() {
         Camera.Builder camera = Camera.getBuilder()
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setLocation(new Point(200, 0, 2500))
@@ -624,8 +621,9 @@ public class MiniProject1 {
 
 
 
-        camera.setImageWriter(new ImageWriter("MP01", 500, 500))
-                .setSampleRays(new SampleRays(true,10, 10))//
+        camera.setImageWriter(new ImageWriter("MP02", 500, 500))
+                .setSampleRays(new SampleRays(true,10, 10))
+                .setAdaptiveSuperSampling(new AdaptiveSuperSampling(true, 3))//
                 .setMultithreading(-1)
                 .build() //
                 .renderImage()
