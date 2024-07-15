@@ -29,6 +29,7 @@ public class Camera implements Cloneable {
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
     private SampleRays sampleRays;
+    private AdaptiveSuperSampling adaptiveSS;
 
     //multi threading fields
     private int threadsCount = 0; // -2 auto, -1 range/stream, 0 no threads, 1+ number of threads
@@ -162,6 +163,13 @@ public class Camera implements Cloneable {
 
             color = constructRays(pixelWidth, pixelHeight, pc);
         }
+        else if(adaptiveSS.isASS()) {
+            Color lu =rayTracer.traceRay(rays[0][0], adaptiveSS.isASS(), adaptiveSS.getDepth());
+            Color ld = rayTracer.traceRay(rays[_N - 1][0], adaptiveSS.isASS(), adaptiveSS.getDepth());
+            Color ru = rayTracer.traceRay(rays[0][_M - 1], adaptiveSS.isASS(), adaptiveSS.getDepth());
+            Color rd = rayTracer.traceRay(rays[_N - 1][_M - 1], adaptiveSS.isASS(), adaptiveSS.getDepth());
+        }
+
         else {
             color = rayTracer.traceRay(centerRay);
         }
