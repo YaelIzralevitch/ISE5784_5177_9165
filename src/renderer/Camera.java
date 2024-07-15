@@ -9,6 +9,7 @@ import renderer.RayTracerBase;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.stream.IntStream;
 
 import static primitives.Util.*;
 
@@ -28,6 +29,11 @@ public class Camera implements Cloneable {
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
     private SampleRays sampleRays;
+
+    //multi threading fields
+    private int threadsCount = 0; // -2 auto, -1 range/stream, 0 no threads, 1+ number of threads
+    private final int SPARE_THREADS = 2; // Spare threads if trying to use all the cores
+    private double printInterval = 0; // printing progress percentage interval
 
 
     public Point getP0() { return p0; }
@@ -122,11 +128,19 @@ public class Camera implements Cloneable {
     public Camera renderImage(){
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
-        for(int i = 0; i < nY; i++){
-            for(int j = 0; j < nX; j++){
-                castRay(nX, nY, j, i);
-            }
+        Pixel.initialize(nY, nX, printInterval);
+
+        if (threadsCount == 0)
+            for(int i = 0; i < nY; i++)
+                for (int j = 0; j < nX; j++)
+                    castRay(nX, nY, j, i);
+
+        else if (threadsCount == -1) {
+            IntStream.range(0, nY).parallel() //
+                    .forEach(i -> IntStream.range(0, nX).parallel() //
+                            .forEach(j -> castRay(nX, nY, j, i)));
         }
+
         return this;
     }
 
@@ -152,6 +166,7 @@ public class Camera implements Cloneable {
             color = rayTracer.traceRay(centerRay);
         }
         imageWriter.writePixel(i, j, color);
+        Pixel.pixelDone();
     }
 
     /**
@@ -388,6 +403,22 @@ public class Camera implements Cloneable {
             catch (CloneNotSupportedException e) {
                 return null;
             }
+        }
+
+        //multi threading functions
+        public Builder setMultithreading(int threads) {
+            if (threads < -2) throw new IllegalArgumentException("Multithreading must be -2 or higher");
+            if (threads >= -1) camera.threadsCount = threads;
+            else { // == -2
+                int cores = Runtime.getRuntime().availableProcessors() - camera.SPARE_THREADS;
+                camera.threadsCount = cores <= 2 ? 1 : cores;
+            }
+            return this;
+        }
+
+        public Builder setDebugPrint(double interval) {
+            camera.printInterval = interval;
+            return this;
         }
     }
 
