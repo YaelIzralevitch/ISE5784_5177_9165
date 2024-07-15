@@ -27,9 +27,7 @@ public class Camera implements Cloneable {
 
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
-
-    /* isAntiAliasing */
-    private boolean isAntiAliasing = false;
+    private SampleRays sampleRays;
 
 
     public Point getP0() { return p0; }
@@ -143,7 +141,7 @@ public class Camera implements Cloneable {
     private void castRay(int nX, int nY, int i, int j){
         Ray centerRay = constructRay(nX, nY, i, j);
         Color color;
-        if(isAntiAliasing){
+        if(sampleRays.isAntiAliasing()){
             Point pc =centerRay.getPoint(this.distance); //pixel center
             double pixelHeight = alignZero(this.height / nY);
             double pixelWidth = alignZero(this.width / nX);
@@ -155,9 +153,6 @@ public class Camera implements Cloneable {
         }
         imageWriter.writePixel(i, j, color);
     }
-
-    private final int N = 10;
-    private final int M = 10;
 
     /**
      * The function sends a sample of rays through a single pixel and returns the color of the pixel
@@ -174,7 +169,7 @@ public class Camera implements Cloneable {
                 colors.add(rayTracer.traceRay(rayR));
             }
         }
-        return average_colors(colors);
+        return sampleRays.average_colors(colors);
 
     }
 
@@ -188,6 +183,8 @@ public class Camera implements Cloneable {
      */
     public Ray[][] constructRaysGrid(double pixelWidth, double pixelHeight, Point pixelCenter) {
 
+        int N = sampleRays.getN();
+        int M = sampleRays.getM();
         Ray[][] rays = new Ray[N][M]; //grid for rays
 
         //We call the function constructRay but this time we launch m * n ray in the same pixel
@@ -213,6 +210,8 @@ public class Camera implements Cloneable {
      */
     private Ray constructRay(double r, double c, double pixelH, double pixelW, Point pc) {
         Point Pij = pc;
+        int N = sampleRays.getN();
+        int M = sampleRays.getM();
         //pixelH = height / nY
         double rY = pixelH / N;
         //pixelW = weight / nX
@@ -234,17 +233,6 @@ public class Camera implements Cloneable {
         //return ray to the center of the pixel
         return new Ray(p0, rayVector);
 
-    }
-
-    /**
-     * Calculates the average of all the colors in the list
-     * @param colors list of Color
-     */
-    private Color average_colors(List<Color> colors){
-        Color[] colorsArray = colors.toArray(new Color[0]);
-        Color initColor = Color.BLACK;
-        Color colorsSum = initColor.add(colorsArray);
-        return colorsSum.reduce(colors.size());
     }
 
     /**
@@ -324,22 +312,22 @@ public class Camera implements Cloneable {
         }
 
         /**
+         * setImageWriter function
+         * @param sampleRays the image writer to set
+         * @return this
+         */
+        public Builder setSampleRays(SampleRays sampleRays) {
+            camera.sampleRays = sampleRays;
+            return this;
+        }
+
+        /**
          * setRayTracer function
          * @param rayTracer
          * @return this
          */
         public Builder setRayTracer(RayTracerBase rayTracer) {
             camera.rayTracer = rayTracer;
-            return this;
-        }
-
-        /**
-         * setIsAntiAliasing function - Do the improvement Anti-aliasing or not
-         * @param isAntiAliasing
-         * @return this
-         */
-        public Builder setIsAntiAliasing(boolean isAntiAliasing) {
-            camera.isAntiAliasing = isAntiAliasing;
             return this;
         }
 

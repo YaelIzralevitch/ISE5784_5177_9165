@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import primitives.*;
 import renderer.Camera;
 import renderer.ImageWriter;
+import renderer.SampleRays;
 import renderer.SimpleRayTracer;
 import scene.Scene;
 
@@ -23,14 +24,35 @@ public class MiniProject1 {
     Color snowmanEyesColor = new Color(java.awt.Color.BLACK);
 
     @Test
+    public void MP00(){
+        Camera.Builder camera = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(scene))
+                .setLocation(new Point(200, 0, 2500))
+                .setDirection(new Vector(-200,-10,-2550), new Vector(0, 255, -1))
+                .setVpSize(150, 150).setVpDistance(1000);
+
+        scene.background = new Color(93, 151, 191);
+        scene.geometries.add(
+                new Sphere(80, new Point(0, -10, -50)).setEmission(new Color(java.awt.Color.GRAY)) //
+                        .setMaterial(new Material().setkD(0).setkS(1.0).setnShininess(30).setkT(0.5)));
+
+        scene.lights.add(
+                new SpotLight(new Color(1000, 600, 0), new Point(-161,72,-36), new Vector(161,-82,-14)) //
+                        .setkL(0.0004).setkQ(0.0000006).setNarrowBeam(10));
+
+        camera.setImageWriter(new ImageWriter("MP00", 500, 500)) //
+                .build() //
+                .renderImage()
+                .writeToImage();
+    }
+
+    @Test
     public void MP1() {
         Camera.Builder camera = Camera.getBuilder()
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setLocation(new Point(200, 0, 2500))
                 .setDirection(new Vector(-200,-10,-2550), new Vector(0, 255, -1))
-                .setVpSize(150, 150).setVpDistance(1000)
-                .setIsAntiAliasing(true);
-
+                .setVpSize(150, 150).setVpDistance(1000);
 
 
         scene.background = new Color(93, 151, 191);
@@ -624,7 +646,8 @@ public class MiniProject1 {
 
 
 
-        camera.setImageWriter(new ImageWriter("MP01", 500, 500)) //
+        camera.setImageWriter(new ImageWriter("MP01", 500, 500))
+                .setSampleRays(new SampleRays(10, 10, true))//
                 .build() //
                 .renderImage()
                 .writeToImage();
