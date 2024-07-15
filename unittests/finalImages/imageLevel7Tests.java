@@ -89,12 +89,7 @@ public class imageLevel7Tests {
                         new Point(-194.98,-241.25,150)) //
                         .setEmission(new Color(84,178,26)) //left
                         .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(400)),
-/*
-                new Polygon(new Point(205.02,158.75,150), new Point(205.02,-241.25,150), new Point(205.02,-241.25,-250),
-                        new Point(205.02,158.75,-250)) //
-                        .setEmission(new Color(yellow)) //
-                        .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(301)),
-*/
+
                 new Polygon(new Point(-194.98,158.75,-250), new Point(-194.98,-241.25,-250), new Point(205.02,-241.25,-250),
                         new Point(205.02,158.75,-250)) //
                         .setEmission(new Color(93, 151, 191)) // front
@@ -328,13 +323,7 @@ public class imageLevel7Tests {
         scene.lights.add(
                 new SpotLight(new Color(1000, 600, 0), new Point(-161,72,-36), new Vector(161,-82,-14)) //
                         .setkL(0.0004).setkQ(0.0000006).setNarrowBeam(10));
-        /*
-        scene.lights.add(
-                new PointLight(new Color(1000, 600, 0), new Point(114.40793,129.07386,-222.3377))
-                        .setkL(0.0004).setkQ(0.000006));
 
-
-         */
 
         camera.setImageWriter(new ImageWriter("FinalProject", 500, 500)) //
                 .build() //

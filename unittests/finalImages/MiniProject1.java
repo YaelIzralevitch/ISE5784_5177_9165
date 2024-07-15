@@ -23,7 +23,7 @@ public class MiniProject1 {
     Color snowmanEyesColor = new Color(java.awt.Color.BLACK);
 
     @Test
-    public void MP00(){
+    public void MP1() {
         Camera.Builder camera = Camera.getBuilder()
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setLocation(new Point(200, 0, 2500))
@@ -31,28 +31,6 @@ public class MiniProject1 {
                 .setVpSize(150, 150).setVpDistance(1000)
                 .setIsAntiAliasing(true);
 
-        scene.background = new Color(93, 151, 191);
-        scene.geometries.add(
-                new Sphere(80, new Point(0, -10, -50)).setEmission(new Color(java.awt.Color.GRAY)) //
-                        .setMaterial(new Material().setkD(0).setkS(1.0).setnShininess(30).setkT(0.5)));
-
-        scene.lights.add(
-                new SpotLight(new Color(1000, 600, 0), new Point(-161,72,-36), new Vector(161,-82,-14)) //
-                        .setkL(0.0004).setkQ(0.0000006).setNarrowBeam(10));
-
-        camera.setImageWriter(new ImageWriter("MP00", 500, 500)) //
-                .build() //
-                .renderImage()
-                .writeToImage();
-    }
-
-    @Test
-    public void MP1() {
-        Camera.Builder camera = Camera.getBuilder()
-                .setRayTracer(new SimpleRayTracer(scene))
-                .setLocation(new Point(200, 0, 2500))
-                .setDirection(new Vector(-200,-10,-2550), new Vector(0, 255, -1))
-                .setVpSize(150, 150).setVpDistance(1000);
 
 
         scene.background = new Color(93, 151, 191);
@@ -113,12 +91,7 @@ public class MiniProject1 {
                         new Point(-194.98,-241.25,150)) //
                         .setEmission(new Color(84,178,26)) //left
                         .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(400)),
-/*
-                new Polygon(new Point(205.02,158.75,150), new Point(205.02,-241.25,150), new Point(205.02,-241.25,-250),
-                        new Point(205.02,158.75,-250)) //
-                        .setEmission(new Color(yellow)) //
-                        .setMaterial(new Material().setkD(new Double3(0.2, 0.6, 0.4)).setkS(new Double3(0.2, 0.4, 0.3)).setnShininess(301)),
-*/
+
                 new Polygon(new Point(-194.98,158.75,-250), new Point(-194.98,-241.25,-250), new Point(205.02,-241.25,-250),
                         new Point(205.02,158.75,-250)) //
                         .setEmission(new Color(93, 151, 191)) // front
