@@ -161,25 +161,26 @@ public class Camera implements Cloneable {
             Point pc =centerRay.getPoint(this.distance); //pixel center
             double pixelHeight = alignZero(this.height / nY);
             double pixelWidth = alignZero(this.width / nX);
-            Ray[][] rays = constructRaysGrid(pixelWidth, pixelHeight, pc);
 
-            if(!adaptiveSS.isASS())
+            if(!adaptiveSS.isASS()) {
+                Ray[][] rays = constructRaysGrid(pixelWidth, pixelHeight, pc);
                 color = constructRays(rays);
+            }
 
             else //Improving Performance with adaptive super sampling
              {
                 int _N = sampleRays.getN();
                 int _M = sampleRays.getM();
                 // The color sample of the four corners of the pixel
-                Color lu =rayTracer.traceRay(rays[0][0]);
-                Color ld = rayTracer.traceRay(rays[_N - 1][0]);
-                Color ru = rayTracer.traceRay(rays[0][_M - 1]);
-                Color rd = rayTracer.traceRay(rays[_N - 1][_M - 1]);
+                Color lu = rayTracer.traceRay(constructRay(0, 0, pixelHeight, pixelWidth, pc));
+                Color ld = rayTracer.traceRay(constructRay(_N - 1, 0, pixelHeight, pixelWidth, pc));
+                Color ru = rayTracer.traceRay(constructRay(0, _M - 1, pixelHeight, pixelWidth, pc));
+                Color rd = rayTracer.traceRay(constructRay(_N - 1, _M - 1, pixelHeight, pixelWidth, pc));
 
                  if (lu.equals(ld) && lu.equals(ru) && lu.equals(rd))
                      color = lu;
                  else
-                     color = adaptiveSSRecursive(rays, lu, ld, ru, rd, 0, 0, _N - 1, _M - 1, adaptiveSS.getDepth());
+                     color = adaptiveSSRecursive(pixelWidth, pixelHeight, pc, lu, ld, ru, rd, 0, 0, _N - 1, _M - 1, adaptiveSS.getDepth());
             }
         }
         else {
@@ -232,7 +233,6 @@ public class Camera implements Cloneable {
     /**
      * the function helps castRay to get the color with super sampling
      *
-     * @param rays        the matrix of rays from the pixel
      * @param lu          the left up point
      * @param ld          the left down point
      * @param ru          the right up point
@@ -244,7 +244,7 @@ public class Camera implements Cloneable {
      * @param depth       the deep of the recursion
      * @return the color in the pixel
      */
-    public Color adaptiveSSRecursive(Ray[][] rays, Color lu, Color ld, Color ru, Color rd, int x1lu, int y1lu, int x2rd, int y2rd, int depth){
+    public Color adaptiveSSRecursive(double pixelWidth, double pixelHeight, Point pc, Color lu, Color ld, Color ru, Color rd, int x1lu, int y1lu, int x2rd, int y2rd, int depth){
         if (depth == 0)
             return lu;
 
@@ -253,30 +253,30 @@ public class Camera implements Cloneable {
         int middleY = (y1lu + y2rd) / 2;
 
         // Five more points for dividing the square into four squares
-        Color mu = rayTracer.traceRay(rays[x1lu][middleY]);
-        Color md = rayTracer.traceRay(rays[x2rd][middleY]);
-        Color mm = rayTracer.traceRay(rays[middleX][middleY]);
-        Color lm = rayTracer.traceRay(rays[middleX][y1lu]);
-        Color rm = rayTracer.traceRay(rays[middleX][y2rd]);
+        Color mu = rayTracer.traceRay(constructRay(x1lu, middleY, pixelHeight, pixelWidth, pc));
+        Color md = rayTracer.traceRay(constructRay(x2rd, middleY, pixelHeight, pixelWidth, pc));
+        Color mm = rayTracer.traceRay(constructRay(middleX, middleY, pixelHeight, pixelWidth, pc));
+        Color lm = rayTracer.traceRay(constructRay(middleX, y1lu, pixelHeight, pixelWidth, pc));
+        Color rm = rayTracer.traceRay(constructRay(middleX, y2rd, pixelHeight, pixelWidth, pc));
 
-        // If all the corners of any subsquare are the same color - add the color to calculate the average colors
-        // Otherwise, a recursive call on the subsquare
+        // If all the corners of any sub-square are the same color - add the color to calculate the average colors
+        // Otherwise, a recursive call on the sub-square
         if (lu.equals(mu) && lu.equals(mm) && lu.equals(lm))
             col = col.add(lu);
         else
-            col = col.add(adaptiveSSRecursive(rays, lu, lm, mu, mm, x1lu, y1lu, middleX, middleY, depth - 1));
+            col = col.add(adaptiveSSRecursive(pixelWidth, pixelHeight, pc, lu, lm, mu, mm, x1lu, y1lu, middleX, middleY, depth - 1));
         if (mu.equals(ru) && mu.equals(mm) && mu.equals(rm))
             col = col.add(mu);
         else
-            col = col.add(adaptiveSSRecursive(rays, mu, mm, ru, rm, x1lu, middleY, middleX, y2rd, depth - 1));
+            col = col.add(adaptiveSSRecursive(pixelWidth, pixelHeight, pc, mu, mm, ru, rm, x1lu, middleY, middleX, y2rd, depth - 1));
         if (lm.equals(mm) && lm.equals(ld) && lm.equals(md))
             col = col.add(lm);
         else
-            col = col.add(adaptiveSSRecursive(rays, lm, ld, mm, md, middleX, y1lu, x2rd, middleY, depth - 1));
+            col = col.add(adaptiveSSRecursive(pixelWidth, pixelHeight, pc, lm, ld, mm, md, middleX, y1lu, x2rd, middleY, depth - 1));
         if (mm.equals(rm) && mm.equals(md) && mm.equals(rd))
             col = col.add(mm);
         else
-            col = col.add(adaptiveSSRecursive(rays, mm, md, rm, rd, middleX, middleY, x2rd, y2rd,depth - 1));
+            col = col.add(adaptiveSSRecursive(pixelWidth, pixelHeight, pc, mm, md, rm, rd, middleX, middleY, x2rd, y2rd,depth - 1));
 
         // Calculating the average of the colors
         return col.reduce(4);

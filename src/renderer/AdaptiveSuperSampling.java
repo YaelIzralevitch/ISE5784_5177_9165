@@ -18,6 +18,10 @@ public class AdaptiveSuperSampling {
      */
     private int depth = 3;
 
+    public AdaptiveSuperSampling(boolean isASS) {
+        this.isASS = isASS;
+    }
+
     public AdaptiveSuperSampling(boolean isASS, int depth) {
         this.isASS = isASS;
         this.depth = depth;

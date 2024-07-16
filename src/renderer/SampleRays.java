@@ -14,6 +14,10 @@ public class SampleRays {
     private int N = 10;
     private int M = 10;
 
+    public SampleRays(boolean isAA){
+        isAntiAliasing = isAA;
+    }
+
     public SampleRays(boolean isAA, int n, int m){
         isAntiAliasing = isAA;
         N = n;

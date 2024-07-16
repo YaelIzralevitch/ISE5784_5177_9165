@@ -626,7 +626,6 @@ public class MiniProject1 {
 
         camera.setImageWriter(new ImageWriter("MP01", 500, 500))
                 .setSampleRays(new SampleRays(true,10, 10))//
-                .setMultithreading(-1)
                 .build() //
                 .renderImage()
                 .writeToImage();
