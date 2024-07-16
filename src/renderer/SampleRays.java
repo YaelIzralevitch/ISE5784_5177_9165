@@ -11,8 +11,8 @@ public class SampleRays {
 
     private boolean isAntiAliasing = false;
     //grid size
-    private int N = 10;
-    private int M = 10;
+    private int N = 9;
+    private int M = 9;
 
     public SampleRays(boolean isAA){
         isAntiAliasing = isAA;

@@ -623,7 +623,7 @@ public class MiniProject2 {
 
         camera.setImageWriter(new ImageWriter("MP02", 500, 500))
                 .setSampleRays(new SampleRays(true))
-                .setAdaptiveSuperSampling(new AdaptiveSuperSampling(false))//
+                .setAdaptiveSuperSampling(new AdaptiveSuperSampling(true))//
                 .setMultithreading(-1)
                 .build() //
                 .renderImage()

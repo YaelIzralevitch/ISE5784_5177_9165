@@ -16,7 +16,7 @@ public class AdaptiveSuperSampling {
     /**
      * The depth of adaptive super sampling's recursion
      */
-    private int depth = 3;
+    private int depth = 2;
 
     public AdaptiveSuperSampling(boolean isASS) {
         this.isASS = isASS;

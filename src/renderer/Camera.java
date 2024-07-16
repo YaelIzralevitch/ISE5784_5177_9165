@@ -4,6 +4,7 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import java.util.Random;
 import renderer.RayTracerBase;
 
 import java.util.LinkedList;
@@ -36,6 +37,10 @@ public class Camera implements Cloneable {
     private final int SPARE_THREADS = 2; // Spare threads if trying to use all the cores
     private double printInterval = 0; // printing progress percentage interval
 
+    /*
+     * random variable used for ray creation
+     */
+    private final Random rand = new Random();
 
     public Point getP0() { return p0; }
 
@@ -302,11 +307,11 @@ public class Camera implements Cloneable {
         //pixelW = weight / nX
         double rX = pixelW / M;
 
-        double xR = (r - ((M - 1) / 2d)) * rX;
-        double yC = -(c - ((N - 1) / 2d)) * rY;
+        double xR = ((r + rand.nextDouble() / (rand.nextBoolean() ? 2 : -2)) - ((M - 1) / 2d)) * rX;
+        double yC = -((c + rand.nextDouble() / (rand.nextBoolean() ? 2 : -2)) - ((N - 1) / 2d)) * rY;
 
         if (xR != 0) {
-            pc = pc.add(vRight.scale(xR));
+            Pij = Pij.add(vRight.scale(xR));
         }
         if (yC != 0) {
             Pij = Pij.add(vUp.scale(yC));
