@@ -1,7 +1,5 @@
 package renderer;
 
-import primitives.Color;
-import primitives.Ray;
 
 /**
  * Functionality union class for Adaptive SuperSampling
@@ -18,10 +16,15 @@ public class AdaptiveSuperSampling {
      */
     private int depth = 2;
 
+    /** empty constructor **/
+    public AdaptiveSuperSampling() { }
+
+    /** one parameter constructor **/
     public AdaptiveSuperSampling(boolean isASS) {
         this.isASS = isASS;
     }
 
+    /** parameters constructor **/
     public AdaptiveSuperSampling(boolean isASS, int depth) {
         this.isASS = isASS;
         this.depth = depth;
@@ -34,13 +37,4 @@ public class AdaptiveSuperSampling {
     public int getDepth() {
         return depth;
     }
-
-    public void setASS(boolean ASS) {
-        isASS = ASS;
-    }
-
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
-
 }

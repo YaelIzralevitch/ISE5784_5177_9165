@@ -370,49 +370,6 @@ public class MiniProject1 {
                         .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
 
 
-/*
-                //ugly tree
-                new Triangle(new Point(-35, 20, -50), new Point(-12.5, 55, -50), new Point(10, 28, -50)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(-35, 20, -50), new Point(-12.5, 55, -50), new Point(-12,18,-35)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(-35, 20, -50), new Point(10, 28, -50), new Point(-12,18,-35)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-
-                new Triangle(new Point(-40, 15, -50), new Point(-12.5, 42, -50), new Point(15, 15, -50)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(-40, 15, -50), new Point(-12.5, 42, -50), new Point(-2,11.5,-36)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(-40, 15, -50), new Point(15, 15, -50), new Point(-2,11.5,-36)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-
-                new Triangle(new Point(-45, -10, -50), new Point(-12.5, 27, -50), new Point(20, 0, -50)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(-45, -10, -50), new Point(-12.5, 27, -50), new Point(-10,-12,-31)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(-45, -10, -50), new Point(20, 0, -50), new Point(-10,-12,-31)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-
-                new Triangle(new Point(-50, -25, -50), new Point(-12.5, 12, -50), new Point(25, -15, -50)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(-50, -25, -50), new Point(-12.5, 12, -50), new Point(4.5, -25.5, -25)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-                new Triangle(new Point(-50, -25, -50), new Point(25, -15, -50), new Point(4.5, -25.5, -25)) //
-                        .setEmission(treeColor) //
-                        .setMaterial(new Material().setkD(0.4).setkS(0.3).setnShininess(100)),
-*/
-
                 //snowflakes
                 new Sphere(1, new Point(60, 20, -20)) //
                         .setEmission(snowColor) //

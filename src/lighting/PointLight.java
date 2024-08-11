@@ -10,8 +10,11 @@ import primitives.Vector;
 public class PointLight extends Light implements LightSource {
 
     private final Point position;
+    /** As the distance increases the light will fade**/
     private double kC = 1;
+    /** The weakening of light intensity due to the phenomenon of light scattering **/
     private double kL = 0;
+    /** Weakening of light intensity due to the law of conservation of energy **/
     private double kQ = 0;
 
     /**
@@ -27,6 +30,7 @@ public class PointLight extends Light implements LightSource {
     /**
      * getIntensity function
      * @param p point
+     * @return the intensity color of the point
      */
     @Override
     public Color getIntensity(Point p) {
@@ -35,7 +39,7 @@ public class PointLight extends Light implements LightSource {
     }
 
     /**
-     * getL function
+     * getL function - get the direction of the light towards the point
      * @param p point
      */
     @Override

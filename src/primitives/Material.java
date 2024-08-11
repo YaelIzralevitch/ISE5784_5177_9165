@@ -13,15 +13,15 @@ public class Material {
      */
     public Double3 kS = Double3.ZERO;
     /**
-     * Specular shininess degree
+     * Transparency attenuation factor
      */
     public Double3 kT = Double3.ZERO;
     /**
-     * Transparency attenuation factor
+     * Reflection attenuation factor
      */
     public Double3 kR = Double3.ZERO;
     /**
-     * Reflection attenuation factor
+     * Specular shininess degree
      */
     public int nShininess = 0;
 

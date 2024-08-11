@@ -81,6 +81,11 @@ public class Ray {
                 : findClosestGeoPoint(points.stream().map(p -> new GeoPoint(null, p)).toList()).point;
     }
 
+    /**
+     * findClosestGeoPoint function
+     * @param geoPoints a list of goPoints of intersection with the ray
+     * @return the geo point closest to the beginning of the ray
+     */
     public GeoPoint findClosestGeoPoint(List<GeoPoint> geoPoints){
         if (geoPoints.isEmpty())
             return null;

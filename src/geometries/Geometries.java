@@ -33,9 +33,9 @@ public class Geometries extends Intersectable{
 
     /**
      * findIntersections function
-     *
-     * @param ray Ray
-     * @return List of intersection points between the ray and the geometry.
+     * find all intersection points that intersect with a specific ray
+     * @param ray ray pointing towards the shapes
+     * @return List of intersection geo points between the ray and the geometry.
      */
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {

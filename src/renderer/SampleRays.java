@@ -14,18 +14,19 @@ public class SampleRays {
     private int N = 9;
     private int M = 9;
 
+    /** empty constructor **/
+    public SampleRays() {}
+
+    /** one parameter constructor **/
     public SampleRays(boolean isAA){
         isAntiAliasing = isAA;
     }
 
+    /** parameters constructor **/
     public SampleRays(boolean isAA, int n, int m){
         isAntiAliasing = isAA;
         N = n;
         M = m;
-    }
-
-    public void setAntiAliasing(boolean antiAliasing) {
-        isAntiAliasing = antiAliasing;
     }
 
     public boolean isAntiAliasing() {
@@ -50,5 +51,4 @@ public class SampleRays {
         Color colorsSum = initColor.add(colorsArray);
         return colorsSum.reduce(colors.size());
     }
-
 }

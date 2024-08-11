@@ -4,7 +4,9 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.Random;
+
 import renderer.RayTracerBase;
 
 import java.util.LinkedList;
@@ -29,55 +31,71 @@ public class Camera implements Cloneable {
 
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
-    private SampleRays sampleRays;
-    private AdaptiveSuperSampling adaptiveSS;
+
+    // miniP 1 and 2
+    private SampleRays sampleRays = new SampleRays();
+    private AdaptiveSuperSampling adaptiveSS = new AdaptiveSuperSampling();
 
     //multi threading fields
-    private int threadsCount = 0; // -2 auto, -1 range/stream, 0 no threads, 1+ number of threads
+    private int threadsCount = 0; // -2 auto, -1 range/stream, 0 no threads
     private final int SPARE_THREADS = 2; // Spare threads if trying to use all the cores
     private double printInterval = 0; // printing progress percentage interval
 
-    /*
-     * random variable used for ray creation
-     */
+    /** random variable used for ray creation **/
     private final Random rand = new Random();
 
-    public Point getP0() { return p0; }
+    public Point getP0() {
+        return p0;
+    }
 
-    public Vector getvRight() { return vRight; }
+    public Vector getvRight() {
+        return vRight;
+    }
 
-    public Vector getvUp() { return vUp; }
+    public Vector getvUp() {
+        return vUp;
+    }
 
-    public Vector getvTo() { return vTo; }
+    public Vector getvTo() {
+        return vTo;
+    }
 
-    public double getWidth() { return width; }
+    public double getWidth() {
+        return width;
+    }
 
-    public double getHeight() { return height; }
+    public double getHeight() {
+        return height;
+    }
 
-    public double getDistance() { return distance; }
+    public double getDistance() {
+        return distance;
+    }
 
     /**
      * Empty Constructor
      */
-    private Camera(){ }
+    private Camera() { }
 
     /**
      * getBuilder function
+     *
      * @return Builder object
      */
-    public static Builder getBuilder(){
+    public static Builder getBuilder() {
         return new Builder();
     }
 
     /**
      * constructRay function
+     *
      * @param nX Represents the amount of columns (row width).
      * @param nY Represents the amount of rows (column height)
-     * @param j A column of pixels
-     * @param i A row of pixels
+     * @param j  A column of pixels
+     * @param i  A row of pixels
      * @return A ray from camera to center pixel i,j
      */
-    public Ray constructRay(int nX, int nY, int j, int i){
+    public Ray constructRay(int nX, int nY, int j, int i) {
 
         Point Pc = p0.add(vTo.scale(distance)); //Image center
 
@@ -86,7 +104,7 @@ public class Camera implements Cloneable {
         double Ry = height / nY;
 
         Point Pij = Pc; //Pixel[i,j] center
-        double Yi = - (i - (nY - 1) / 2d) * Ry;
+        double Yi = -(i - (nY - 1) / 2d) * Ry;
         double Xj = (j - (nX - 1) / 2d) * Rx;
 
         // Pixel[i,j] is in the middle column
@@ -103,17 +121,17 @@ public class Camera implements Cloneable {
 
     /**
      * printGrid function
+     *
      * @param interval
      * @param color
      */
-    public Camera printGrid(int interval, Color color){
-        Color pink = new Color(255d, 29d, 190d);
+    public Camera printGrid(int interval, Color color) {
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
 
-        for(int i = 0; i < nY; i++){
-            for(int j = 0; j < nX; j++){
-                if(i % interval == 0 || j % interval == 0){
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                if (i % interval == 0 || j % interval == 0) {
                     imageWriter.writePixel(j, i, color);
                 }
             }
@@ -129,15 +147,15 @@ public class Camera implements Cloneable {
     }
 
     /**
-     * renderImage function
+     * renderImage function - Sends rays to all pixels in the view plane checks what color each pixel is and colors it
      */
-    public Camera renderImage(){
+    public Camera renderImage() {
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
         Pixel.initialize(nY, nX, printInterval);
 
         if (threadsCount == 0)
-            for(int i = 0; i < nY; i++)
+            for (int i = 0; i < nY; i++)
                 for (int j = 0; j < nX; j++)
                     castRay(nX, nY, j, i);
 
@@ -152,28 +170,27 @@ public class Camera implements Cloneable {
 
 
     /**
-     * castRay function - Returns the color of a single pixel
+     * castRay function - Paints a single pixel
+     *
      * @param nX Image resolution
      * @param nY Image resolution
-     * @param i The pixel index
-     * @param j The pixel index
+     * @param i  The pixel index
+     * @param j  The pixel index
      */
-    private void castRay(int nX, int nY, int i, int j){
+    private void castRay(int nX, int nY, int i, int j) {
         Ray centerRay = constructRay(nX, nY, i, j);
         Color color;
         //Anti aliasing improvement
-        if(sampleRays.isAntiAliasing()){
-            Point pc =centerRay.getPoint(this.distance); //pixel center
+        if (sampleRays.isAntiAliasing()) {
+            Point pc = centerRay.getPoint(this.distance); //pixel center
             double pixelHeight = alignZero(this.height / nY);
             double pixelWidth = alignZero(this.width / nX);
 
-            if(!adaptiveSS.isASS()) {
+            if (!adaptiveSS.isASS()) {
                 Ray[][] rays = constructRaysGrid(pixelWidth, pixelHeight, pc);
                 color = constructRays(rays);
-            }
-
-            else //Improving Performance with adaptive super sampling
-             {
+            } else //Improving Performance with adaptive super sampling
+            {
                 int _N = sampleRays.getN();
                 int _M = sampleRays.getM();
                 // The color sample of the four corners of the pixel
@@ -182,13 +199,12 @@ public class Camera implements Cloneable {
                 Color ru = rayTracer.traceRay(constructRay(0, _M - 1, pixelHeight, pixelWidth, pc));
                 Color rd = rayTracer.traceRay(constructRay(_N - 1, _M - 1, pixelHeight, pixelWidth, pc));
 
-                 if (lu.equals(ld) && lu.equals(ru) && lu.equals(rd))
-                     color = lu;
-                 else
-                     color = adaptiveSSRecursive(pixelWidth, pixelHeight, pc, lu, ld, ru, rd, 0, 0, _N - 1, _M - 1, adaptiveSS.getDepth());
+                if (lu.equals(ld) && lu.equals(ru) && lu.equals(rd))
+                    color = lu;
+                else
+                    color = adaptiveSSRecursive(pixelWidth, pixelHeight, pc, lu, ld, ru, rd, 0, 0, _N - 1, _M - 1, adaptiveSS.getDepth());
             }
-        }
-        else {
+        } else {
             color = rayTracer.traceRay(centerRay);
         }
         imageWriter.writePixel(i, j, color);
@@ -198,13 +214,14 @@ public class Camera implements Cloneable {
     /**
      * The function sends a sample of rays through a single pixel and returns the color of the pixel
      * by averaging the colors of all the rays.
+     *
      * @param rays grid of rays
      */
-    public Color constructRays(Ray[][] rays){
+    public Color constructRays(Ray[][] rays) {
         List<Color> colors = new LinkedList<>();
         //Finding the colors of each ray
-        for(Ray[] rayC : rays){
-            for(Ray rayR : rayC){
+        for (Ray[] rayC : rays) {
+            for (Ray rayR : rayC) {
                 colors.add(rayTracer.traceRay(rayR));
             }
         }
@@ -215,7 +232,8 @@ public class Camera implements Cloneable {
     /**
      * This function get a ray launched in the center of a pixel and launch a beam n * m others rays
      * on the same pixel
-     * @param pixelWidth pixel width
+     *
+     * @param pixelWidth  pixel width
      * @param pixelHeight pixel height
      * @param pixelCenter the center of the pixel Point
      * @return list of rays when every ray is launched inside a pixel with random emplacement
@@ -228,7 +246,7 @@ public class Camera implements Cloneable {
 
         //We call the function constructRay but this time we launch m * n ray in the same pixel
         for (int c = 0; c < N; c++) {
-            for (int r = 0; r< M; r++) {
+            for (int r = 0; r < M; r++) {
                 rays[c][r] = constructRay(r, c, pixelHeight, pixelWidth, pixelCenter);
             }
         }
@@ -238,18 +256,18 @@ public class Camera implements Cloneable {
     /**
      * the function helps castRay to get the color with super sampling
      *
-     * @param lu          the left up point
-     * @param ld          the left down point
-     * @param ru          the right up point
-     * @param rd          the right down point
-     * @param x1lu        index x of left up
-     * @param y1lu        index y of left up
-     * @param x2rd        index x of right down
-     * @param y2rd        index y of right down
-     * @param depth       the deep of the recursion
+     * @param lu    the left up point
+     * @param ld    the left down point
+     * @param ru    the right up point
+     * @param rd    the right down point
+     * @param x1lu  index x of left up
+     * @param y1lu  index y of left up
+     * @param x2rd  index x of right down
+     * @param y2rd  index y of right down
+     * @param depth the deep of the recursion
      * @return the color in the pixel
      */
-    public Color adaptiveSSRecursive(double pixelWidth, double pixelHeight, Point pc, Color lu, Color ld, Color ru, Color rd, int x1lu, int y1lu, int x2rd, int y2rd, int depth){
+    public Color adaptiveSSRecursive(double pixelWidth, double pixelHeight, Point pc, Color lu, Color ld, Color ru, Color rd, int x1lu, int y1lu, int x2rd, int y2rd, int depth) {
         if (depth == 0)
             return lu;
 
@@ -281,7 +299,7 @@ public class Camera implements Cloneable {
         if (mm.equals(rm) && mm.equals(md) && mm.equals(rd))
             col = col.add(mm);
         else
-            col = col.add(adaptiveSSRecursive(pixelWidth, pixelHeight, pc, mm, md, rm, rd, middleX, middleY, x2rd, y2rd,depth - 1));
+            col = col.add(adaptiveSSRecursive(pixelWidth, pixelHeight, pc, mm, md, rm, rd, middleX, middleY, x2rd, y2rd, depth - 1));
 
         // Calculating the average of the colors
         return col.reduce(4);
@@ -334,6 +352,7 @@ public class Camera implements Cloneable {
 
         /**
          * setLocation function
+         *
          * @param p point
          * @return this
          */
@@ -344,12 +363,13 @@ public class Camera implements Cloneable {
 
         /**
          * setDirection function
+         *
          * @param vt toward vector
          * @param vu up vector
          * @return this
          */
         public Builder setDirection(Vector vt, Vector vu) {
-            if(!isZero(vt.dotProduct(vu))){
+            if (!isZero(vt.dotProduct(vu))) {
                 throw new IllegalArgumentException("The vectors are not orthogonal");
             }
 
@@ -361,12 +381,13 @@ public class Camera implements Cloneable {
 
         /**
          * setVpSize function
+         *
          * @param w width of view plane
          * @param h height of view plane
          * @return this
          */
         public Builder setVpSize(double w, double h) {
-            if(isZero(w) || isZero(h) || w < 0 || h < 0){
+            if (isZero(w) || isZero(h) || w < 0 || h < 0) {
                 throw new IllegalArgumentException("View plane size can't be negative or 0");
             }
 
@@ -378,11 +399,12 @@ public class Camera implements Cloneable {
 
         /**
          * setVpDistance function
+         *
          * @param d distance of view plane from camera
          * @return this
          */
         public Builder setVpDistance(double d) {
-            if(isZero(d) || d < 0){
+            if (isZero(d) || d < 0) {
                 throw new IllegalArgumentException("Distance length can't be negative or 0");
             }
 
@@ -393,6 +415,7 @@ public class Camera implements Cloneable {
 
         /**
          * setImageWriter function
+         *
          * @param imageWriter the image writer to set
          * @return this
          */
@@ -403,6 +426,7 @@ public class Camera implements Cloneable {
 
         /**
          * setSampleRays function
+         *
          * @param sampleRays the sample rays to set
          * @return this
          */
@@ -413,6 +437,7 @@ public class Camera implements Cloneable {
 
         /**
          * setAdaptiveSuperSampling function
+         *
          * @param adaptiveSuperSampling the adaptive super sampling to set
          * @return this
          */
@@ -423,6 +448,7 @@ public class Camera implements Cloneable {
 
         /**
          * setRayTracer function
+         *
          * @param rayTracer
          * @return this
          */
@@ -433,6 +459,7 @@ public class Camera implements Cloneable {
 
         /**
          * build function
+         *
          * @return an object of Camera
          */
         public Camera build() {
@@ -484,8 +511,7 @@ public class Camera implements Cloneable {
 
             try {
                 return (Camera) camera.clone();
-            }
-            catch (CloneNotSupportedException e) {
+            } catch (CloneNotSupportedException e) {
                 return null;
             }
         }

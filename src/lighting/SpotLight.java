@@ -65,6 +65,7 @@ public class SpotLight extends PointLight{
     /**
      * getIntensity function
      * @param p point
+     * @return the intensity color of the point
      */
     @Override
     public Color getIntensity(Point p) {

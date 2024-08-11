@@ -115,7 +115,8 @@ public class Color {
     public String toString() { return "rgb:" + rgb; }
 
     /**
-     * rgb function
+     * getRgb -  function
+     * @return rgb color
      */
     public Double3 getRgb() {
         return rgb;

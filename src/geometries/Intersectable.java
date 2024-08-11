@@ -9,10 +9,10 @@ import java.util.*;
  */
 public abstract class Intersectable {
     /**
-     * findIntersections function
-     *
-     * @param ray Ray
-     * @return List of intersection points between the ray and the geometry.
+     * findIntersections function:
+     * find all intersections points that intersect with a specific ray
+     * @param ray  the ray to intersect a geometry/geometries
+     * @return list of intersection points
      */
     public List<Point> findIntersections(Ray ray) {
         var geoList = findGeoIntersections(ray);
@@ -22,8 +22,8 @@ public abstract class Intersectable {
     /**
      * findGeoIntersections function:
      * find all intersections points that intersect with a specific ray
-     * @param ray
-     * @return
+     * @param ray  the ray to intersect a geometry/geometries
+     * @return list of intersection points
      */
     public List<GeoPoint> findGeoIntersections(Ray ray) {
         return findGeoIntersectionsHelper(ray, Double.POSITIVE_INFINITY);
@@ -41,7 +41,6 @@ public abstract class Intersectable {
     }
 
 
-
     /**
      * findIntersections helper
      * @param ray
@@ -54,7 +53,9 @@ public abstract class Intersectable {
      * PDS static internal helper class - GeoPoint
      */
     public static class GeoPoint {
+        /** The geometry that the point is on **/
         public Geometry geometry;
+        /** point **/
         public Point point;
 
         /**

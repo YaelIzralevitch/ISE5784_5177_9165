@@ -9,7 +9,9 @@ import primitives.Vector;
  * Geometry interface for any geometric body
  */
 public abstract class Geometry extends Intersectable{
+    /** The color of the Geometry **/
     protected Color emission = Color.BLACK;
+    /** The material elements of the geometry **/
     private Material material = new Material();
 
     /**
@@ -41,8 +43,8 @@ public abstract class Geometry extends Intersectable{
     }
 
     /**
-     * GetNormal function
-     * @param p1 Point
+     * GetNormal abstract function
+     * @param p1 Point on the geometry
      * @return Normal to the Point p1
      */
     public abstract Vector getNormal(Point p1);

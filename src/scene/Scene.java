@@ -7,6 +7,9 @@ import primitives.Color;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This class contains functions and calculations on a Scene
+ */
 public class    Scene {
 
     public String name;
